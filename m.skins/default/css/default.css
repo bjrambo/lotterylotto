@@ -1,0 +1,77 @@
+/* 기본 */
+#lottery_view{background:#eee; /*background-image:url(../img/bg.jpg);*/ width:760px; margin:0 auto; overflow:hidden;}
+#lottery_view .lottery_money_img{margin-bottom:-1px; vertical-align:text-top;}
+#lottery_view a, #lottery_view span{color:#000; text-decoration:none;}
+
+/* 상단 */
+#lottery_view .lottery_top{height:60px; line-height:60px; width:100%; background:#2F2D2D; position:relative;}
+#lottery_view .lottery_top .m_msg{margin-left:20px; color:#C4EC38; font-size:24px; font-weight:bold; }
+#lottery_view .lottery_top .w_msg{padding-left:15px; color:white;}
+#lottery_view .lottery_top .total_money_wrap{display:inline-block; position:absolute; border-radius:5px; right:20px; top:12px; height:35px; line-height:35px; width:250px; background:white;}
+#lottery_view .lottery_top .total_money_wrap .t_img{position:absolute; left:-25px; top:-6px;}
+#lottery_view .lottery_top .total_money_wrap .t_text{float:left; margin-left:35px;}
+#lottery_view .lottery_top .total_money_wrap .t_money{float:right; margin-right:15px; color:tomato; font-size:18px; font-weight:bold;}
+
+/* 중단 */
+#lottery_view .lottery_bottom{position:relative; overflow:hidden;}
+#lottery_view .lottery_bottom .set_info{float:left; height:250px; width:300px; background:white; margin:20px 0px 20px 20px;}
+#lottery_view .lottery_bottom .set_info .info_subject{display:block; height:50px; line-height:50px; text-align:center; background:#38373E; color:white; font-size:14px; font-weight:bold; margin-bottom:10px;}
+
+#lottery_view .lottery_bottom .lottery_skin{float:right; height:250px; width:400px; background:white; margin:20px 20px 0px 20px; background-size:400px 250px; background-image:url(../img/skin.png)}
+#lottery_view .lottery_bottom .lottery_skin .lottery_btn{display:inline-block; cursor:pointer; padding:20px; margin:90px 0px 0px 210px; font-size:25px; font-weight:bold; white-space:nowrap; transition:0.1s;}
+#lottery_view .lottery_bottom .lottery_skin .lottery_btn:hover{color:tomato;}
+#lottery_view .lottery_bottom .lottery_info{height:30px; line-height:30px; margin:0 10px; }
+#lottery_view .lottery_bottom .lottery_info .l_info{display:inline-block; width:90px; float:left;}
+#lottery_view .lottery_bottom .lottery_info .r_info{display:inline-block; width:95px; float:left;}
+#lottery_view .lottery_bottom .lottery_info .fix_left{height:100px;}
+
+/* 하단 */
+#lottery_view  .lottery_method{position:relative; overflow:hidden; height:100px; margin:0 20px 20px 20px; background:white;}
+#lottery_view  .lottery_method .l_div{float:left; width:100px; text-align:center;}
+#lottery_view  .lottery_method .l_div .g_subject{display:inline-block; line-height:100px;font-size:18px; font-weight:bold;}
+#lottery_view  .lottery_method .r_div{float:left; margin:20px 0 0 10px;}
+#lottery_view  .lottery_method .r_div .g_info{display:block; height:20px; line-height:20px; padding-left:20px; border-left:3px solid #bbb;}
+
+/* 순위 정보 */
+#lottery_view .rank_info_wrap{display:none; position:relative; margin:0px 20px 0px 20px;}
+#lottery_view .stat_box{min-width:200px; width:30%; float:left; display:inline-block; position:relative; background:white; margin:0px 10px 20px 10px; padding:0px; border-radius:3px; border:1px solid #ddd;}
+#lottery_view .stat_box ul,
+#lottery_view .stat_box li{margin:0px; padding:0px; list-style:none;}
+#lottery_view .stat_box ul{margin:10px;}
+#lottery_view .stat_box li{position:relative; margin:8px 0px; }
+#lottery_view .stat_box .stat_title{font-size:13px; border-bottom:1px solid #ddd; background:#fafafa; padding:10px 15px; margin:0px; font-weight:bold;}
+#lottery_view .stat_box .point_rank{margin-right:10px; font-weight:bold; color:#333;}
+#lottery_view .stat_box .sum_point{float:right; color:#555;}
+
+/* 미니정보 */
+#lottery_view .lottery_mini_wrap{border-bottom:2px solid #dfdfdf; margin-bottom:30px; position:relative; height:13px; text-align:center;}
+#lottery_view .mini_box{margin:0; padding:0; font-size:14px; font-weight:bold; color:#555; display:inline-block; padding:5px 15px; background:#fff; border-radius:5px; margin-right:10px; transition:0.3s;}
+#lottery_view .mini_box:hover{background:dimgrey; color:white;}
+#lottery_view .rank_img{cursor:pointer; padding:5px 10px; color:black; background-color:white; background-image:url(../img/rank_b.png); background-position:center; background-repeat:no-repeat}
+#lottery_view .rank_img:hover{padding:5px 10px; color:dimgrey; background-image:url(../img/rank_w.png); background-position:center; background-repeat:no-repeat}
+#lottery_view .admin_img{padding:5px 10px; color:white; background-image:url(../img/setting_b.png); background-position:center; background-repeat:no-repeat}
+#lottery_view .admin_img:hover{padding:5px 10px; color:dimgrey; background-image:url(../img/setting_w.png); background-position:center; background-repeat:no-repeat}
+
+/* 참여리스트 */
+#lottery_view .user_list{position:relative; margin:0px 20px 0px 20px; background:white; border-collapse:collapse; width:720px; border:1px solid #eee;}
+#lottery_view .user_list th{padding:10px 0px; text-align:center; border-right:1px solid #f4f4f4; background:#f8f8f8; color:#555; background:linear-gradient(to bottom,#FFF 0%,#F6F6F6 100%); background:-webkit-gradient(linear,0% 0%,0% 100%,from(#FFF),to(#F6F6F6));}
+#lottery_view .user_list td{padding:8px 0px; border-right:1px solid #f4f4f4; text-align:center;}
+#lottery_view .user_list td a{color:#000; text-decoration:none;}
+#lottery_view .user_list tbody tr:nth-child(even){background:#f9f9f9;}
+#lottery_view .user_list .result_img{height:24px;}
+
+/* 페이지 */
+#lottery_view .page_navi{position:relative; width:720px; height:35px; line-height:35px; margin:5px 20px 20px 20px; text-align:center; }
+#lottery_view .page_navi a{margin:0px; padding:5px 8px; background:white; border:1px solid #eee; border-radius:3px; transition:0.2s;}
+#lottery_view .page_navi a:hover{background:yellowgreen; color:white;}
+#lottery_view .page_navi .page_seleted{background:yellowgreen; color:white;}
+
+
+/* 복권결과 */
+#lottery_result_wrap{display:none; position:fixed; top:0px; left:0px; width:100%; height:100%; z-index:100000;}
+#lottery_result_wrap .lottery_result_bg{position:absolute; top:0; left:0; width:100%; height:100%; background:black; opacity:0.7; -moz-opacity: 0.7; filter: alpha(opacity=70); }
+#lottery_result_wrap .lottery_result_box{position:relative; top:15%; width:280px; min-height:300px; margin:0 auto; border-radius:3px; background:#eee; border:1px solid #ccc; overflow:hidden;}
+#lottery_result_wrap .lottery_result_box .rank_result{height:200px; margin:20px; border-radius:3px; border:3px solid #eee; background:white;}
+#lottery_result_wrap .lottery_result_box .rank_result img{width:170px; margin:15px 0px 0px 30px;}
+#lottery_result_wrap .lottery_result_box .msg_result{text-align:center; }
+#lottery_result_wrap .lottery_result_box .msg_result span{display:inline-block; font-size:14px; font-weight:bold; }

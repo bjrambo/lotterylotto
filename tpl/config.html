@@ -1,0 +1,895 @@
+<!--#include("./header.html")-->
+
+<!--// 메세지 -->
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<!--// 모듈config설정 -->
+<form action="./" class="x_form-horizontal" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="module" value="{$module_config->module}" />
+	<input type="hidden" name="act" value="procLotterylottoAdminConfig" />
+	<!--// 공통설정 -->
+	<section class="section">
+		<h1>공통설정</h1>
+		<!--//화폐단위 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="money_type">★ 화폐단위</label>
+			<div class="x_controls">
+				<select name="money_type" id="money_type">
+					<option value="point" selected="selected"|cond="$module_config->money_type== 'point'">포인트</option>
+					<option value="cash" selected="selected"|cond="$module_config->money_type== 'cash'">캐시 (캐시모듈필요)</option>
+				</select>
+				<a href="#money_type_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="money_type_help" class="x_help-block x_alert" hidden>로또복권 모듈의 화폐단위를 선택해주세요. 캐시 사용시 캐시시스템 모듈이 필요합니다.</p>
+			</div>
+		</div>	
+		<!--//반응형스킨 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="respond_skin">★ 반응형스킨</label>
+			<div class="x_controls">
+				<select name="respond_skin" id="respond_skin">
+					<option value="yes" selected="selected"|cond="$module_config->respond_skin== 'yes'">사용</option>
+					<option value="no" selected="selected"|cond="$module_config->respond_skin== 'no'">미사용</option>
+				</select>
+				<a href="#respond_skin_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="respond_skin_help" class="x_help-block x_alert" hidden>반응형 스킨을 사용합니다.</p>
+			</div>
+		</div>	
+		<!--//당첨금순위사용 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="rank_list_use">★ 당첨금 순위</label>
+			<div class="x_controls">
+				<select name="rank_list_use" id="rank_list_use">
+					<option value="yes" selected="selected"|cond="$module_config->rank_list_use== 'yes'">사용</option>
+					<option value="no" selected="selected"|cond="$module_config->rank_list_use== 'no'">미사용</option>
+				</select>
+				<a href="#rank_list_use_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="rank_list_use_help" class="x_help-block x_alert" hidden>1~3등까지의 당첨금 순위를 복권구매화면에 표시합니다.</p>
+			</div>
+		</div>	
+		<!--//로그삭제연동 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="del_user_log">★ 회원탈퇴시 로그삭제</label>
+			<div class="x_controls">
+				<select name="del_user_log" id="del_user_log">
+					<option value="yes" selected="selected"|cond="$module_config->del_user_log== 'yes'">사용</option>
+					<option value="no" selected="selected"|cond="$module_config->del_user_log== 'no'">미사용</option>
+				</select>
+				<a href="#del_user_log_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="del_user_log_help" class="x_help-block x_alert" hidden>회원이 탈퇴할경우 해당회원의 복권로그를 삭제합니다.</p>
+			</div>
+		</div>	
+	</section>
+	
+	<!--// 구매설정 -->
+	<section class="section">
+		<h1>구매설정</h1>
+		<!--//일일구매제한 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="buy_limit_use">★ 일일구매제한</label>
+			<div class="x_controls">
+				<select name="buy_limit_use" id="buy_limit_use">
+					<option value="no" selected="selected"|cond="$module_config->buy_limit_use== 'no'">미사용</option>
+					<option value="yes" selected="selected"|cond="$module_config->buy_limit_use== 'yes'">사용</option>
+				</select>
+				<a href="#buy_limit_use_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="buy_limit_use_help" class="x_help-block x_alert" hidden>하루동안 복권구매 횟수를 제한합니다.</p>
+			</div>
+		</div>
+		<!--//제한횟수 -->
+		<div class="x_control-group buy_limit_use_hidden" style="display:<!--@if($module_config->buy_limit_use== 'yes')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="buy_limit_count">┗ 제한횟수</label>
+			<div class="x_controls">
+				<input type="text" name="buy_limit_count" id="buy_limit_count" value="{$module_config->buy_limit_count}" />
+				<a href="#buy_limit_count_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="buy_limit_count_help" class="x_help-block x_alert" hidden>하루동안 복권 구매횟수를 몇회까지 허용할지 설정해주세요.</p>
+			</div>
+		</div>	
+		<!--//복권가격 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="buy_money">★ 복권가격</label>
+			<div class="x_controls">
+				<input type="text" name="buy_money" id="buy_money" value="{$module_config->buy_money}" />
+				<a href="#buy_money_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="buy_money_help" class="x_help-block x_alert" hidden>복권 가격을 입력해주세요. 미입력시 100</p>
+			</div>
+		</div>
+		<!--//구매수수료 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="buy_tax_use">★ 구매수수료</label>
+			<div class="x_controls">
+				<select name="buy_tax_use" id="buy_tax_use">
+					<option value="no" selected="selected"|cond="$module_config->buy_tax_use== 'no'">미사용</option>
+					<option value="yes" selected="selected"|cond="$module_config->buy_tax_use== 'yes'">사용</option>
+				</select>
+				<a href="#buy_tax_use_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="buy_tax_use_help" class="x_help-block x_alert" hidden>복권 구매시 구입가격의 일정%를 수수료로 차감하고 당첨금으로 누적합니다.</p>
+			</div>
+		</div>
+		<!--//수수료 -->
+		<div class="x_control-group buy_tax_use_hidden" style="display:<!--@if($module_config->buy_tax_use== 'yes')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="buy_tax">┗ 수수료 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="buy_tax" id="buy_tax" value="{$module_config->buy_tax}" />
+				<a href="#buy_tax_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="buy_tax_help" class="x_help-block x_alert" hidden>구매 수수료를 설정해주세요 단위는 % 입니다.</p>
+			</div>
+		</div>	
+	</section>
+	
+	
+	<!--// 당첨확률 -->
+	<section class="section">
+		<h1>당첨확률 설정</h1>
+		<!--//1등 당첨확률 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="first_percent">★ 1등 당첨확률 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="first_percent" id="first_percent" value="{$module_config->first_percent}" />
+				<a href="#first_percent_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="first_percent_help" class="x_help-block x_alert" hidden>당첨확률을 설정해주세요 소수점 2자리까지 허용합니다.</p>
+			</div>
+		</div>	
+		<!--//2등 당첨확률 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="second_percent">★ 2등 당첨확률 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="second_percent" id="second_percent" value="{$module_config->second_percent}" />
+				<a href="#second_percent_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="second_percent_help" class="x_help-block x_alert" hidden>당첨확률을 설정해주세요 소수점 2자리까지 허용합니다.</p>
+			</div>
+		</div>	
+		<!--//3등 당첨확률 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="third_percent">★ 3등 당첨확률 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="third_percent" id="third_percent" value="{$module_config->third_percent}" />
+				<a href="#third_percent_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="third_percent_help" class="x_help-block x_alert" hidden>당첨확률을 설정해주세요 소수점 2자리까지 허용합니다.</p>
+			</div>
+		</div>	
+		<!--//4등 당첨확률 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="fourth_percent">★ 4등 당첨확률 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="fourth_percent" id="fourth_percent" value="{$module_config->fourth_percent}" />
+				<a href="#fourth_percent_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="fourth_percent_help" class="x_help-block x_alert" hidden>당첨확률을 설정해주세요 소수점 2자리까지 허용합니다.</p>
+			</div>
+		</div>	
+		<!--//5등 당첨확률 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="fifth_percent">★ 5등 당첨확률 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="fifth_percent" id="fifth_percent" value="{$module_config->fifth_percent}" />
+				<a href="#fifth_percent_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="fifth_percent_help" class="x_help-block x_alert" hidden>당첨확률을 설정해주세요 소수점 2자리까지 허용합니다.</p>
+			</div>
+		</div>	
+		<!--//꽝 확률 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="lose_percent">★ 꽝 확률 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="lose_percent" id="lose_percent" value="{$module_config->lose_percent}"  readonly />
+				<a href="#lose_percent_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="lose_percent_help" class="x_help-block x_alert" hidden>100%에서 1~5등까지의 확률을 차감한 확률입니다. 자동계산됩니다.</p>
+			</div>
+		</div>	
+	</section>
+	
+	
+	<!--// 당첨금 설정 -->
+	<section class="section">
+		<h1>당첨금 설정</h1>
+		<!--//비상누적금 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="emergency_money">★ 비상누적금</label>
+			<div class="x_controls">
+				<input type="text" name="emergency_money" id="emergency_money" value="{$module_config->emergency_money}" />
+				<a href="#emergency_money_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="emergency_money_help" class="x_help-block x_alert" hidden>누적된 당첨금이 없거나 부족할 때 비상누적금을 이용하여 당첨금을 지급합니다.</p>
+			</div>
+		</div>	
+		<!--//비상누적금 이용시점 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="emergency_money_min_point">┗ 비상누적금 이용시점</label>
+			<div class="x_controls">
+				<input type="text" name="emergency_money_min_point" id="emergency_money_min_point" value="{$module_config->emergency_money_min_point}" />
+				<a href="#emergency_money_min_point_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="emergency_money_min_point_help" class="x_help-block x_alert" hidden>누적당첨금이 설정된 포인트보다 낮을경우 비상누적금을 이용합니다.</p>
+			</div>
+		</div>	
+		<!--//★ 고정당첨금 차감기능 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="fix_money_minus">★ 고정당첨금 차감기능</label>
+			<div class="x_controls">
+				<select name="fix_money_minus" id="fix_money_minus">
+					<option value="yes" selected="selected"|cond="$module_config->fix_money_minus== 'yes'">사용</option>
+					<option value="no" selected="selected"|cond="$module_config->fix_money_minus== 'no'">미사용</option>
+				</select>
+				<a href="#fix_money_minus_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="fix_money_minus_help" class="x_help-block x_alert" hidden>당첨금 형태가 '고정' 일 경우 누적당첨금에서 고정당첨금을 차감합니다.</p>
+			</div>
+		</div>
+		<!--//★ 1등 당첨금 형태 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="money_type1">★ 1등 당첨금 형태</label>
+			<div class="x_controls">
+				<select name="money_type1" id="money_type1">
+					<option value="per" selected="selected"|cond="$module_config->money_type1== 'per'">비율</option>
+					<option value="fix" selected="selected"|cond="$module_config->money_type1== 'fix'">고정</option>
+				</select>
+				<a href="#money_type1_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="money_type1_help" class="x_help-block x_alert" hidden>비율은 누적 당첨금에서 일정%를 당첨금으로 지급합니다, 고정은 누적된 당첨금 상관없이 일정한 당첨금을 지급합니다.</p>
+			</div>
+		</div>
+		<!--//당첨금(고정) -->
+		<div class="x_control-group money_type1_fix" style="display:<!--@if($module_config->money_type1== 'fix')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_fix_money1">┗ 당첨금</label>
+			<div class="x_controls">
+				<input type="text" name="get_fix_money1" id="get_fix_money1" value="{$module_config->get_fix_money1}" />
+				<a href="#get_fix_money1_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_fix_money1_help" class="x_help-block x_alert" hidden>당첨금을 설정해주세요.</p>
+			</div>
+		</div>	
+		<!--//당첨금(비율) -->
+		<div class="x_control-group money_type1_per" style="display:<!--@if($module_config->money_type1== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_per_money1">┃ 당첨금 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="get_per_money1" id="get_per_money1" value="{$module_config->get_per_money1}" />
+				<a href="#get_per_money1_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_per_money1_help" class="x_help-block x_alert" hidden>당첨금을 설정해주세요. 단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//수수료(비율) -->
+		<div class="x_control-group money_type1_per" style="display:<!--@if($module_config->money_type1== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_tax1">┃ 수수료 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="get_tax1" id="get_tax1" value="{$module_config->get_tax1}" />
+				<a href="#get_tax1_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_tax1_help" class="x_help-block x_alert" hidden>당첨시 일정%를 누적당첨금에서 수수료로 차감합니다. 차감된 수수료는 사이트에서 회수합니다.  단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//누적금(비율) -->
+		<div class="x_control-group money_type1_per" style="display:<!--@if($module_config->money_type1== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="last_money1">┗ 누적금 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="last_money1" id="last_money1" value="{$module_config->last_money1}"  readonly />
+				<a href="#last_money1_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="last_money1_help" class="x_help-block x_alert" hidden>당첨시 일정%를 누적당첨금으로 적립합니다. 단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//★ 2등 당첨금 형태 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="money_type2">★ 2등 당첨금 형태</label>
+			<div class="x_controls">
+				<select name="money_type2" id="money_type2">
+					<option value="per" selected="selected"|cond="$module_config->money_type2== 'per'">비율</option>
+					<option value="fix" selected="selected"|cond="$module_config->money_type2== 'fix'">고정</option>
+				</select>
+				<a href="#money_type2_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="money_type2_help" class="x_help-block x_alert" hidden>비율은 누적 당첨금에서 일정%를 당첨금으로 지급합니다, 고정은 누적된 당첨금 상관없이 고정된 당첨금을 지급합니다.</p>
+			</div>
+		</div>
+		<!--//당첨금(고정) -->
+		<div class="x_control-group money_type2_fix" style="display:<!--@if($module_config->money_type2== 'fix')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_fix_money2">┗ 당첨금</label>
+			<div class="x_controls">
+				<input type="text" name="get_fix_money2" id="get_fix_money2" value="{$module_config->get_fix_money2}" />
+				<a href="#get_fix_money2_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_fix_money2_help" class="x_help-block x_alert" hidden>당첨금을 설정해주세요.</p>
+			</div>
+		</div>	
+		<!--//당첨금(비율) -->
+		<div class="x_control-group money_type2_per" style="display:<!--@if($module_config->money_type2== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_per_money2">┃ 당첨금 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="get_per_money2" id="get_per_money2" value="{$module_config->get_per_money2}" />
+				<a href="#get_per_money2_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_per_money2_help" class="x_help-block x_alert" hidden>당첨금을 설정해주세요. 단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//수수료(비율) -->
+		<div class="x_control-group money_type2_per" style="display:<!--@if($module_config->money_type2== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_tax2">┃ 수수료 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="get_tax2" id="get_tax2" value="{$module_config->get_tax2}" />
+				<a href="#get_tax2_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_tax2_help" class="x_help-block x_alert" hidden>당첨시 일정%를 누적당첨금에서 수수료로 차감합니다. 차감된 수수료는 사이트에서 회수합니다.  단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//누적금(비율) -->
+		<div class="x_control-group money_type2_per" style="display:<!--@if($module_config->money_type2== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="last_money2">┗ 누적금 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="last_money2" id="last_money2" value="{$module_config->last_money2}"  readonly />
+				<a href="#last_money2_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="last_money2_help" class="x_help-block x_alert" hidden>당첨시 일정%를 누적당첨금으로 적립합니다. 단위는 % 입니다.</p>
+			</div>
+		</div>
+		<!--//★ 3등 당첨금 형태 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="money_type3">★ 3등 당첨금 형태</label>
+			<div class="x_controls">
+				<select name="money_type3" id="money_type3">
+					<option value="per" selected="selected"|cond="$module_config->money_type3== 'per'">비율</option>
+					<option value="fix" selected="selected"|cond="$module_config->money_type3== 'fix'">고정</option>
+				</select>
+				<a href="#money_type3_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="money_type3_help" class="x_help-block x_alert" hidden>비율은 누적 당첨금에서 일정%를 당첨금으로 지급합니다, 고정은 누적된 당첨금 상관없이 고정된 당첨금을 지급합니다.</p>
+			</div>
+		</div>
+		<!--//당첨금(고정) -->
+		<div class="x_control-group money_type3_fix" style="display:<!--@if($module_config->money_type3== 'fix')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_fix_money3">┗ 당첨금</label>
+			<div class="x_controls">
+				<input type="text" name="get_fix_money3" id="get_fix_money3" value="{$module_config->get_fix_money3}" />
+				<a href="#get_fix_money3_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_fix_money3_help" class="x_help-block x_alert" hidden>당첨금을 설정해주세요.</p>
+			</div>
+		</div>	
+		<!--//당첨금(비율) -->
+		<div class="x_control-group money_type3_per" style="display:<!--@if($module_config->money_type3== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_per_money3">┃ 당첨금 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="get_per_money3" id="get_per_money3" value="{$module_config->get_per_money3}" />
+				<a href="#get_per_money3_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_per_money3_help" class="x_help-block x_alert" hidden>당첨금을 설정해주세요. 단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//수수료(비율) -->
+		<div class="x_control-group money_type3_per" style="display:<!--@if($module_config->money_type3== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_tax3">┃ 수수료 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="get_tax3" id="get_tax3" value="{$module_config->get_tax3}" />
+				<a href="#get_tax3_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_tax3_help" class="x_help-block x_alert" hidden>당첨시 일정%를 누적당첨금에서 수수료로 차감합니다. 차감된 수수료는 사이트에서 회수합니다.  단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//누적금(비율) -->
+		<div class="x_control-group money_type3_per" style="display:<!--@if($module_config->money_type3== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="last_money3">┗ 누적금 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="last_money3" id="last_money3" value="{$module_config->last_money3}"  readonly />
+				<a href="#last_money3_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="last_money3_help" class="x_help-block x_alert" hidden>당첨시 일정%를 누적당첨금으로 적립합니다. 단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//★ 4등 당첨금 형태 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="money_type4">★ 4등 당첨금 형태</label>
+			<div class="x_controls">
+				<select name="money_type4" id="money_type4">
+					<option value="per" selected="selected"|cond="$module_config->money_type4== 'per'">비율</option>
+					<option value="fix" selected="selected"|cond="$module_config->money_type4== 'fix'">고정</option>
+				</select>
+				<a href="#money_type4_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="money_type4_help" class="x_help-block x_alert" hidden>비율은 누적 당첨금에서 일정%를 당첨금으로 지급합니다, 고정은 누적된 당첨금 상관없이 고정된 당첨금을 지급합니다.</p>
+			</div>
+		</div>
+		<!--//당첨금(고정) -->
+		<div class="x_control-group money_type4_fix" style="display:<!--@if($module_config->money_type4== 'fix')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_fix_money4">┗ 당첨금</label>
+			<div class="x_controls">
+				<input type="text" name="get_fix_money4" id="get_fix_money4" value="{$module_config->get_fix_money4}" />
+				<a href="#get_fix_money4_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_fix_money4_help" class="x_help-block x_alert" hidden>당첨금을 설정해주세요.</p>
+			</div>
+		</div>	
+		<!--//당첨금(비율) -->
+		<div class="x_control-group money_type4_per" style="display:<!--@if($module_config->money_type4== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_per_money4">┃ 당첨금 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="get_per_money4" id="get_per_money4" value="{$module_config->get_per_money4}" />
+				<a href="#get_per_money4_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_per_money4_help" class="x_help-block x_alert" hidden>당첨금을 설정해주세요. 단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//수수료(비율) -->
+		<div class="x_control-group money_type4_per" style="display:<!--@if($module_config->money_type4== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_tax4">┃ 수수료 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="get_tax4" id="get_tax4" value="{$module_config->get_tax4}" />
+				<a href="#get_tax4_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_tax4_help" class="x_help-block x_alert" hidden>당첨시 일정%를 누적당첨금에서 수수료로 차감합니다. 차감된 수수료는 사이트에서 회수합니다.  단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//누적금(비율) -->
+		<div class="x_control-group money_type4_per" style="display:<!--@if($module_config->money_type4== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="last_money4">┗ 누적금 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="last_money4" id="last_money4" value="{$module_config->last_money4}"  readonly />
+				<a href="#last_money4_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="last_money4_help" class="x_help-block x_alert" hidden>당첨시 일정%를 누적당첨금으로 적립합니다. 단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//★ 5등 당첨금 형태 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="money_type5">★ 5등 당첨금 형태</label>
+			<div class="x_controls">
+				<select name="money_type5" id="money_type5">
+					<option value="per" selected="selected"|cond="$module_config->money_type5== 'per'">비율</option>
+					<option value="fix" selected="selected"|cond="$module_config->money_type5== 'fix'">고정</option>
+				</select>
+				<a href="#money_type5_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="money_type5_help" class="x_help-block x_alert" hidden>비율은 누적 당첨금에서 일정%를 당첨금으로 지급합니다, 고정은 누적된 당첨금 상관없이 고정된 당첨금을 지급합니다.</p>
+			</div>
+		</div>
+		<!--//당첨금(고정) -->
+		<div class="x_control-group money_type5_fix" style="display:<!--@if($module_config->money_type5== 'fix')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_fix_money5">┗ 당첨금</label>
+			<div class="x_controls">
+				<input type="text" name="get_fix_money5" id="get_fix_money5" value="{$module_config->get_fix_money5}" />
+				<a href="#get_fix_money5_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_fix_money5_help" class="x_help-block x_alert" hidden>당첨금을 설정해주세요.</p>
+			</div>
+		</div>	
+		<!--//당첨금(비율) -->
+		<div class="x_control-group money_type5_per" style="display:<!--@if($module_config->money_type5== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_per_money5">┃ 당첨금 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="get_per_money5" id="get_per_money5" value="{$module_config->get_per_money5}" />
+				<a href="#get_per_money5_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_per_money5_help" class="x_help-block x_alert" hidden>당첨금을 설정해주세요. 단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//수수료(비율) -->
+		<div class="x_control-group money_type5_per" style="display:<!--@if($module_config->money_type5== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="get_tax5">┃ 수수료 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="get_tax5" id="get_tax5" value="{$module_config->get_tax5}" />
+				<a href="#get_tax5_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="get_tax5_help" class="x_help-block x_alert" hidden>당첨시 일정%를 누적당첨금에서 수수료로 차감합니다. 차감된 수수료는 사이트에서 회수합니다.  단위는 % 입니다.</p>
+			</div>
+		</div>	
+		<!--//누적금(비율) -->
+		<div class="x_control-group money_type5_per" style="display:<!--@if($module_config->money_type5== 'per')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="last_money5">┗ 누적금 (%)</label>
+			<div class="x_controls">
+				<input type="text" name="last_money5" id="last_money5" value="{$module_config->last_money5}"  readonly />
+				<a href="#last_money5_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="last_money5_help" class="x_help-block x_alert" hidden>당첨시 일정%를 누적당첨금으로 적립합니다. 단위는 % 입니다.</p>
+			</div>
+		</div>			
+	</section>
+	<!--// 당첨메세지 설정 -->
+	<section class="section">
+		<h1>당첨메세지 설정</h1>
+		<!--//당첨메세지 설정 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="win_msg">★ 당첨메세지 설정</label>
+			<div class="x_controls">
+				<textarea name="win_msg" id="win_msg">{$module_config->win_msg}</textarea>
+				<a href="#win_msg_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="win_msg_help" class="x_help-block x_alert" hidden>치환자를 사용하여 당첨 메세지를 설정해주세요.<br> [rank]:당첨순위, [point]:당첨금, [price]:구매비용, [money]:화폐단위, [enter]:한줄넘김</p>
+			</div>
+		</div>			
+		<!--//꽝메세지 설정 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="lose_msg">★ 꽝메세지 설정</label>
+			<div class="x_controls">
+				<textarea name="lose_msg" id="lose_msg">{$module_config->lose_msg}</textarea>
+				<a href="#lose_msg_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="lose_msg_help" class="x_help-block x_alert" hidden>치환자를 사용하여 꽝 메세지를 설정해주세요.<br> [rank]:당첨순위, [point]:당첨금, [price]:구매비용, [money]:화폐단위, [enter]:한줄넘김 </p>
+			</div>
+		</div>	
+	</section>
+	
+	<!--// 당첨소감 설정 -->
+	<section class="section">
+		<h1>당첨소감 설정</h1>
+		<!--//당첨소감 적용할 등수 -->
+		<div class="x_control-group">
+			<span class="x_control-label">★ 당첨소감 적용할 등수</span>
+			<div class="x_controls">
+				<label class="x_inline"><input type="checkbox" name="prize_msg_target[]" checked="checked"|cond="in_array('1', $module_config->prize_msg_target)" value="1" /> 1등</label>
+				<label class="x_inline"><input type="checkbox" name="prize_msg_target[]" checked="checked"|cond="in_array('2', $module_config->prize_msg_target)" value="2" /> 2등</label>
+				<label class="x_inline"><input type="checkbox" name="prize_msg_target[]" checked="checked"|cond="in_array('3', $module_config->prize_msg_target)" value="3" /> 3등</label>
+				<label class="x_inline"><input type="checkbox" name="prize_msg_target[]" checked="checked"|cond="in_array('4', $module_config->prize_msg_target)" value="4" /> 4등</label>
+				<label class="x_inline"><input type="checkbox" name="prize_msg_target[]" checked="checked"|cond="in_array('5', $module_config->prize_msg_target)" value="5" /> 5등</label>
+				<label class="x_inline"><input type="checkbox" name="prize_msg_target[]" checked="checked"|cond="in_array('0', $module_config->prize_msg_target)" value="0" /> 꽝</label>
+				<label class="x_inline"><input type="checkbox" name="prize_msg_target[]" checked="checked"|cond="in_array('x', $module_config->prize_msg_target)" value="x" /> 적용안함</label>
+				<a href="#prize_msg_target_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="prize_msg_target_help" class="x_help-block x_alert" hidden>복권 당첨시 당첨소감 기능을 적용할 등수를 선택해주세요. 당첨소감은 사용자가 작성하며 미입력시 관리자가 설정한 메세지로 대체됩니다.</p>
+			</div>
+		</div>		
+		<!--//당첨소감 기본 메세지 설정 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="prize_msg">★ 당첨소감 기본 메세지 설정</label>
+			<div class="x_controls">
+				<textarea name="prize_msg" id="prize_msg">{$module_config->prize_msg}</textarea>
+				<a href="#prize_msg_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="prize_msg_help" class="x_help-block x_alert" hidden>사용자가 당첨소감을 미입력시 기본적으로 저장할 메세지를 치환자를 사용하여 설정해주세요.<br> [rank]:당첨순위, [point]:당첨금, [price]:구매비용, [money]:화폐단위, [enter]:한줄넘김 </p>
+			</div>
+		</div>	
+	</section>
+	
+	
+	<!--// 복권 화면설정 -->
+	<section class="section">
+		<h1>복권 화면설정</h1>
+		<!--//복권 구매목록 표시 -->
+		<div class="x_control-group">
+			<label class="x_control-label" for="user_list_use">★ 복권 구매목록 표시</label>
+			<div class="x_controls">
+				<select name="user_list_use" id="user_list_use">
+					<option value="yes" selected="selected"|cond="$module_config->user_list_use== 'yes'">표시</option>
+					<option value="no" selected="selected"|cond="$module_config->user_list_use== 'no'">미표시</option>
+				</select>
+				<a href="#user_list_use_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="user_list_use_help" class="x_help-block x_alert" hidden>복권을 구매한 회원목록을 복권화면에 표시 합니다. </p>
+			</div>
+		</div>
+		<!--//기간 -->
+		<div class="x_control-group user_list_use_hidden" style="display:<!--@if($module_config->user_list_use== 'yes')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="user_list_date">┃ 조회기간 (n일)</label>
+			<div class="x_controls">
+				<input type="text" name="user_list_date" id="user_list_date" value="{$module_config->user_list_date}" />
+				<a href="#user_list_date_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="user_list_date_help" class="x_help-block x_alert" hidden>최근 n일동안의 구매목록을 조회합니다.</p>
+			</div>
+		</div>			
+		<!--//목록수 -->
+		<div class="x_control-group user_list_use_hidden" style="display:<!--@if($module_config->user_list_use== 'yes')-->block<!--@else-->none<!--@end-->">
+			<label class="x_control-label" for="user_list_count">┗ 목록수</label>
+			<div class="x_controls">
+				<input type="text" name="user_list_count" id="user_list_count" value="{$module_config->user_list_count}" />
+				<a href="#user_list_count_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="user_list_count_help" class="x_help-block x_alert" hidden>출력할 목록수를 설정해주세요.</p>
+			</div>
+		</div>	
+	</section>
+	
+	<!--//저장버튼-->
+	<div class="x_clearfix btnArea">
+		<span class="x_pull-right"><input class="x_btn x_btn-primary" type="submit" value="{$lang->cmd_save}" /></span>
+	</div>
+</form>
+
+
+<script type="text/javascript">
+jQuery(function($){
+	//일일구매제한
+	$('#buy_limit_use').change(function(){
+		var val = $(this).children("option:selected").val();
+		buy_limit_use(val);
+	});
+	//구매수수료
+	$('#buy_tax_use').change(function(){
+		var val = $(this).children("option:selected").val();
+		buy_tax_use(val);
+	});
+	//복권 구매목록
+	$('#user_list_use').change(function(){
+		var val = $(this).children("option:selected").val();
+		user_list_use(val);
+	});
+	//1등당첨금
+	$('#money_type1').change(function(){
+		var val = $(this).children("option:selected").val();
+		money_type1(val);
+	});
+	//2등당첨금
+	$('#money_type2').change(function(){
+		var val = $(this).children("option:selected").val();
+		money_type2(val);
+	});
+	//3등당첨금
+	$('#money_type3').change(function(){
+		var val = $(this).children("option:selected").val();
+		money_type3(val);
+	});
+	//4등당첨금
+	$('#money_type4').change(function(){
+		var val = $(this).children("option:selected").val();
+		money_type4(val);
+	});
+	//5등당첨금
+	$('#money_type5').change(function(){
+		var val = $(this).children("option:selected").val();
+		money_type5(val);
+	});
+});
+
+</script>
+<script type="text/javascript">
+	//일일구매제한
+	function buy_limit_use(val){
+		if(val == 'yes'){
+			$('div.buy_limit_use_hidden').slideDown();
+		}else{
+			$('div.buy_limit_use_hidden').slideUp();
+		}
+	}
+	//구매수수료
+	function buy_tax_use(val){
+		if(val == 'yes'){
+			$('div.buy_tax_use_hidden').slideDown();
+		}else{
+			$('div.buy_tax_use_hidden').slideUp();
+		}
+	}
+	//복권 구매목록
+	function user_list_use(val){
+		if(val == 'yes'){
+			$('div.user_list_use_hidden').slideDown();
+		}else{
+			$('div.user_list_use_hidden').slideUp();
+		}
+	}
+	//1등당첨금
+	function money_type1(val){
+		if(val == 'per'){
+			$('div.money_type1_per').slideDown();
+			$('div.money_type1_fix').slideUp();
+		}else{
+			$('div.money_type1_per').slideUp();
+			$('div.money_type1_fix').slideDown();
+		}
+	}
+	//2등당첨금
+	function money_type2(val){
+		if(val == 'per'){
+			$('div.money_type2_per').slideDown();
+			$('div.money_type2_fix').slideUp();
+		}else{
+			$('div.money_type2_per').slideUp();
+			$('div.money_type2_fix').slideDown();
+		}
+	}
+	//3등당첨금
+	function money_type3(val){
+		if(val == 'per'){
+			$('div.money_type3_per').slideDown();
+			$('div.money_type3_fix').slideUp();
+		}else{
+			$('div.money_type3_per').slideUp();
+			$('div.money_type3_fix').slideDown();
+		}
+	}
+	//4등당첨금
+	function money_type4(val){
+		if(val == 'per'){
+			$('div.money_type4_per').slideDown();
+			$('div.money_type4_fix').slideUp();
+		}else{
+			$('div.money_type4_per').slideUp();
+			$('div.money_type4_fix').slideDown();
+		}
+	}
+	//5등당첨금
+	function money_type5(val){
+		if(val == 'per'){
+			$('div.money_type5_per').slideDown();
+			$('div.money_type5_fix').slideUp();
+		}else{
+			$('div.money_type5_per').slideUp();
+			$('div.money_type5_fix').slideDown();
+		}
+	}
+</script>
+	
+<script type="text/javascript">
+jQuery(function($){
+	//1등 당첨누적금 자동계산
+	$('#get_per_money1, #get_tax1').keyup(function(){
+		last_money1();
+	});
+	function last_money1(){
+		var percent = 100-$('#get_per_money1').val()-$('#get_tax1').val();
+		$('#last_money1').val(percent.toFixed(2));
+	}
+	//2등 당첨누적금 자동계산
+	$('#get_per_money2, #get_tax2').keyup(function(){
+		last_money2();
+	});
+	function last_money2(){
+		var percent = 100-$('#get_per_money2').val()-$('#get_tax2').val();
+		$('#last_money2').val(percent.toFixed(2));
+	}
+	//3등 당첨누적금 자동계산
+	$('#get_per_money3, #get_tax3').keyup(function(){
+		last_money3();
+	});
+	function last_money3(){
+		var percent = 100-$('#get_per_money3').val()-$('#get_tax3').val();
+		$('#last_money3').val(percent.toFixed(2));
+	}
+	//4등 당첨누적금 자동계산
+	$('#get_per_money4, #get_tax4').keyup(function(){
+		last_money4();
+	});
+	function last_money4(){
+		var percent = 100-$('#get_per_money4').val()-$('#get_tax4').val();
+		$('#last_money4').val(percent.toFixed(2));
+	}
+	//5등 당첨누적금 자동계산
+	$('#get_per_money5, #get_tax5').keyup(function(){
+		last_money5();
+	});
+	function last_money5(){
+		var percent = 100-$('#get_per_money5').val()-$('#get_tax5').val();
+		$('#last_money5').val(percent.toFixed(2));
+	}
+	
+	//꽝확률 자동계산
+	$('#first_percent, #second_percent, #third_percent, #fourth_percent, #fifth_percent').keyup(function(){
+		lose_percent();
+	});
+	function lose_percent(){
+		var percent = 100-$('#first_percent').val()-$('#second_percent').val()-$('#third_percent').val()-$('#fourth_percent').val()-$('#fifth_percent').val();
+		$('#lose_percent').val(percent.toFixed(2));
+	}
+	
+});
+</script>
+
+<!--// 아래가 원본인데 특정 호스팅에서 xe문법이 작동안되어 스크립트 분리함
+<script type="text/javascript">
+//<![CDATA[
+jQuery(function($){
+	//일일구매제한
+	$('#buy_limit_use').change(function(){
+		var val = $(this).children("option:selected").val();
+		buy_limit_use(val);
+	});
+	function buy_limit_use(val){
+		if(val == 'yes'){
+			$('div.buy_limit_use_hidden').slideDown();
+		}else{
+			$('div.buy_limit_use_hidden').slideUp();
+		}
+	}
+	//구매수수료
+	$('#buy_tax_use').change(function(){
+		var val = $(this).children("option:selected").val();
+		buy_tax_use(val);
+	});
+	function buy_tax_use(val){
+		if(val == 'yes'){
+			$('div.buy_tax_use_hidden').slideDown();
+		}else{
+			$('div.buy_tax_use_hidden').slideUp();
+		}
+	}
+	//복권 구매목록
+	$('#user_list_use').change(function(){
+		var val = $(this).children("option:selected").val();
+		user_list_use(val);
+	});
+	function user_list_use(val){
+		if(val == 'yes'){
+			$('div.user_list_use_hidden').slideDown();
+		}else{
+			$('div.user_list_use_hidden').slideUp();
+		}
+	}
+	//1등당첨금
+	$('#money_type1').change(function(){
+		var val = $(this).children("option:selected").val();
+		money_type1(val);
+	});
+	function money_type1(val){
+		if(val == 'per'){
+			$('div.money_type1_per').slideDown();
+			$('div.money_type1_fix').slideUp();
+		}else{
+			$('div.money_type1_per').slideUp();
+			$('div.money_type1_fix').slideDown();
+		}
+	}
+	//2등당첨금
+	$('#money_type2').change(function(){
+		var val = $(this).children("option:selected").val();
+		money_type2(val);
+	});
+	function money_type2(val){
+		if(val == 'per'){
+			$('div.money_type2_per').slideDown();
+			$('div.money_type2_fix').slideUp();
+		}else{
+			$('div.money_type2_per').slideUp();
+			$('div.money_type2_fix').slideDown();
+		}
+	}
+	//3등당첨금
+	$('#money_type3').change(function(){
+		var val = $(this).children("option:selected").val();
+		money_type3(val);
+	});
+	function money_type3(val){
+		if(val == 'per'){
+			$('div.money_type3_per').slideDown();
+			$('div.money_type3_fix').slideUp();
+		}else{
+			$('div.money_type3_per').slideUp();
+			$('div.money_type3_fix').slideDown();
+		}
+	}
+	//4등당첨금
+	$('#money_type4').change(function(){
+		var val = $(this).children("option:selected").val();
+		money_type4(val);
+	});
+	function money_type4(val){
+		if(val == 'per'){
+			$('div.money_type4_per').slideDown();
+			$('div.money_type4_fix').slideUp();
+		}else{
+			$('div.money_type4_per').slideUp();
+			$('div.money_type4_fix').slideDown();
+		}
+	}
+	//5등당첨금
+	$('#money_type5').change(function(){
+		var val = $(this).children("option:selected").val();
+		money_type5(val);
+	});
+	function money_type5(val){
+		if(val == 'per'){
+			$('div.money_type5_per').slideDown();
+			$('div.money_type5_fix').slideUp();
+		}else{
+			$('div.money_type5_per').slideUp();
+			$('div.money_type5_fix').slideDown();
+		}
+	}
+	
+	
+	//1등 당첨누적금 자동계산
+	$('#get_per_money1, #get_tax1').keyup(function(){
+		last_money1();
+	});
+	function last_money1(){
+		var percent = 100-$('#get_per_money1').val()-$('#get_tax1').val();
+		$('#last_money1').val(percent.toFixed(2));
+	}
+	//2등 당첨누적금 자동계산
+	$('#get_per_money2, #get_tax2').keyup(function(){
+		last_money2();
+	});
+	function last_money2(){
+		var percent = 100-$('#get_per_money2').val()-$('#get_tax2').val();
+		$('#last_money2').val(percent.toFixed(2));
+	}
+	//3등 당첨누적금 자동계산
+	$('#get_per_money3, #get_tax3').keyup(function(){
+		last_money3();
+	});
+	function last_money3(){
+		var percent = 100-$('#get_per_money3').val()-$('#get_tax3').val();
+		$('#last_money3').val(percent.toFixed(2));
+	}
+	//4등 당첨누적금 자동계산
+	$('#get_per_money4, #get_tax4').keyup(function(){
+		last_money4();
+	});
+	function last_money4(){
+		var percent = 100-$('#get_per_money4').val()-$('#get_tax4').val();
+		$('#last_money4').val(percent.toFixed(2));
+	}
+	//5등 당첨누적금 자동계산
+	$('#get_per_money5, #get_tax5').keyup(function(){
+		last_money5();
+	});
+	function last_money5(){
+		var percent = 100-$('#get_per_money5').val()-$('#get_tax5').val();
+		$('#last_money5').val(percent.toFixed(2));
+	}
+	
+	
+	
+	//꽝확률 자동계산
+	$('#first_percent, #second_percent, #third_percent, #fourth_percent, #fifth_percent').keyup(function(){
+		lose_percent();
+	});
+	function lose_percent(){
+		var percent = 100-$('#first_percent').val()-$('#second_percent').val()-$('#third_percent').val()-$('#fourth_percent').val()-$('#fifth_percent').val();
+		$('#lose_percent').val(percent.toFixed(2));
+	}
+	
+});
+//]]>
+</script>
+-->

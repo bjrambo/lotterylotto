@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+	<permissions>			
+    </permissions>
+	<actions>
+		<action name="procLotterylottoAdminModuleInfo" type="controller" />						<!--// 기본설정-->
+		<action name="procLotterylottoAdminConfig" type="controller" />							<!--// 로또복권설정-->
+		<action name="procLotterylottoAdminLogDelete" type="controller" />						<!--// 선택로그삭제-->
+		<action name="procLotterylottoAdminLogDeleteAll" type="controller" />					<!--// 전체로그삭제-->
+		<!--///////////////////////////////////////////////////////////////////////////////////////////////////////-->
+		<action name="procLotterylottoBuyLottery" type="controller" />							<!--// 로또복권구입-->
+		<action name="procLotterylottoUpdateMsg" type="controller" />							<!--// 당첨소감입력-->
+		<!--///////////////////////////////////////////////////////////////////////////////////////////////////////-->
+		<action name="dispLotterylottoAdminModuleInfo" type="view" admin_index="true" />		<!--// 기본설정-->
+		<action name="dispLotterylottoAdminSkinInfo" type="view" />								<!--// 스킨관리-->
+		<action name="dispLotterylottoAdminGrantInfo" type="view" />							<!--// 권한관리-->
+		<action name="dispLotterylottoAdminConfig" type="view" />								<!--// 로또복권설정-->
+		<action name="dispLotterylottoAdminLog" type="view" />									<!--// 로또복권로그-->
+		<action name="dispLotterylottoAdminStats" type="view" />								<!--// 로또복권통계-->
+		<!--///////////////////////////////////////////////////////////////////////////////////////////////////////-->
+		<action name="dispLotterylottoIndex" type="view" index="true" />						<!--// 복권화면-->
+		<action name="dispLotterylottoMylottery" type="view" />									<!--// 나의구매내역-->
+	</actions>
+</module>

@@ -1,0 +1,59 @@
+/***********************************************/
+/**                 태블릿이하                **/
+/***********************************************/
+@media all and (max-width:1080px){
+	
+/* 기본 */	
+.tb_hidden{display:none!important;}
+#lottery_view{width:100%;}
+
+/* 상단 */
+#lottery_view .lottery_top .m_msg{display:none;}
+#lottery_view .lottery_top .total_money_wrap{width:50%; right:3%;}
+
+/* 중단 */
+#lottery_view .lottery_bottom .set_info{height:100%; width:90%; margin:5%;}
+#lottery_view .lottery_bottom .lottery_info .fix_left{height:100%}
+#lottery_view .lottery_bottom .lottery_skin{height:250px; width:90%; margin:5%; margin-top:0; background-size:100% 250px;}
+#lottery_view .lottery_bottom .lottery_skin .lottery_btn{margin:90px 0px 0px 52%;}
+
+/* 하단 */
+#lottery_view  .lottery_method{height:100%; margin:5%; margin-top:0;}
+#lottery_view  .lottery_method .l_div{width:100%; text-align:center; background:#38373E; color:white;}
+#lottery_view  .lottery_method .l_div .g_subject{line-height:35px;font-size:15px; color:white;}
+#lottery_view  .lottery_method .r_div{margin:5%;}
+#lottery_view  .lottery_method .r_div .g_info{height:100%; padding-bottom:3px;}
+
+/* 순위 정보 */
+#lottery_view  .stat_box{width:95%;}
+
+/* 참여리스트 */
+#lottery_view .user_list{margin:5%; margin-top:0; width:90%;}
+
+/* 페이지 */
+#lottery_view .page_navi{width:90%; margin:5%; margin-top:0; }
+
+}
+
+
+
+/***********************************************/
+/**                 모바일이하                **/
+/***********************************************/
+@media all and (max-width:480px){
+	
+/* 기본 */	
+.mb_hidden{display:none!important;}
+
+/* 상단 */
+#lottery_view .lottery_top .w_msg{display:none;}
+#lottery_view .lottery_top .total_money_wrap{width:85%; right:3%;}
+
+/* 중단 */
+#lottery_view .lottery_bottom .lottery_skin{height:200px; width:90%; margin:5%; margin-top:0; background-size:100% 200px;}
+#lottery_view .lottery_bottom .lottery_skin .lottery_btn{margin:65px 0px 0px 45%; font-size:22px;}
+
+/* 미니정보 */
+#lottery_view .mini_box{margin:0;}
+
+}

@@ -1,0 +1,64 @@
+<load target="css/default.css" />
+<load target="css/respond.css" cond="$module_config->respond_skin != 'no'" />
+
+<!--//복권화면-->
+<div id="lottery_view">
+	<!--// 미니정보 -->
+	<div class="lottery_mini_wrap" style="margin-top:20px;">
+		<span class="mini_box tb_hidden">구매횟수 : {number_format($module_config->user_money->buy_cnt)} 매</span>
+		<!--<span class="mini_box">구매금액 : {number_format($module_config->user_money->buy_money)} {$module_config->money_img}</span>-->
+		<span class="mini_box">당첨금액 : {number_format($module_config->user_money->get_money)} {$module_config->money_img}</span>
+		<a class="mini_box" href="{getUrl('','act','dispLotterylottoIndex')}" cond="$logged_info">복권구매화면</a>
+	</div>
+	<!--//참여리스트-->
+	<table class="user_list" summary="복권결과 리스트" cond="$module_config->user_list_use != 'no'">
+		<thead>
+			<tr>
+				<th class="mb_hidden">번호</th>
+				<th>닉네임</th>
+				<th>복권결과</th>
+				<th>당첨금</th>
+				<th class="tb_hidden" cond="!in_array('x',$module_config->prize_msg_target)">당첨소감</th>
+				<th class="tb_hidden">일시</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr loop="$log_info => $key, $val">
+				<td class="mb_hidden">{$key}</td>
+				<td>
+					{@  $oMemberModel = &getModel('member');  
+						$member_info = $oMemberModel->getMemberInfoByMemberSrl($val->member_srl); 
+					}
+					<a class="member_{$val->member_srl}" href="#" onclick="return false" style="margin-right:25px;">{$member_info->nick_name}</a>
+				</td>
+				<td>
+					<span cond="$val->result == '1'"><img src="img/1.png" class="result_img"/></span>
+					<span cond="$val->result == '2'"><img src="img/2.png" class="result_img"/></span>
+					<span cond="$val->result == '3'"><img src="img/3.png" class="result_img"/></span>
+					<span cond="$val->result == '4'"><img src="img/4.png" class="result_img"/></span>
+					<span cond="$val->result == '5'"><img src="img/5.png" class="result_img"/></span>
+					<span cond="$val->result == '0'"><img src="img/0.png" class="result_img"/></span>
+				</td>
+				<td>
+					<span cond="$val->get_money != '0'"><b style="color:#555">{number_format($val->get_money)}</b> {$module_config->money_img}</span>
+					<span cond="$val->get_money == '0'">없음</span>
+				</td>
+				<td class="tb_hidden" style="max-width:110px" cond="!in_array('x',$module_config->prize_msg_target)">
+					<span cond="$val->prize_msg">{$val->prize_msg}</span>
+					<span cond="!$val->prize_msg">없음</span>
+				</td>
+				<td class="tb_hidden">{date("Y-m-d H:i:s",strtotime($val->regdate));}</td>
+			</tr>
+		</tbody>
+	</table>
+	<!--// 페이지 네비게이션 -->
+	<div class="page_navi" cond="$module_config->user_list_use != 'no'"> 
+		<a href="{getUrl('page','','module_srl','')}">처음</a> 
+		<block loop="$page_no = $page_navigation->getNextPage()">
+			<a cond="$page == $page_no" class="page_seleted"><strong cond="$page_no == $page">{$page_no}</strong></a>
+			<a cond="$page != $page_no" href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a> 
+		</block>
+		<a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" >맨뒤</a>
+	</div>
+	
+</div>

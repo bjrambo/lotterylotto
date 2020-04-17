@@ -1,0 +1,254 @@
+<load target="css/default.css" />
+<!--%load_js_plugin("ui.datepicker")-->
+<!--#include("./header.html")-->
+
+<load target="plugin/flot/jquery.flot.js" />
+<load target="plugin/flot/jquery.flot.symbol.js" />
+<load target="plugin/flot/jquery.flot.resize.js" />
+<load target="plugin/flot/jquery.flot.pie.js" />
+<load target="plugin/flot/for.flot.js" />
+
+<!--//메세지 -->
+<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+	<p>{$XE_VALIDATOR_MESSAGE}</p>
+</div>
+
+<!--//검색기능 -->
+<div class="search">
+	<form action="" method="get">
+		<input type="hidden" name="error_return_url" value="" />
+		<input type="hidden" name="module" value="{$module}" /> 
+		<input type="hidden" name="page" value="1" />
+		<!--//기간-->
+		<select name="search_day" id="search_day">
+			<option value="today" selected="selected"|cond="$search_day== 'today' ">오늘</option>
+			<option value="all" selected="selected"|cond="$search_day== 'all' ">전체</option>
+			<option value="last" selected="selected"|cond="$search_day== 'last' ">최근</option>
+			<option value="moreless" selected="selected"|cond="$search_day== 'moreless' ">기간</option>
+		</select>
+		<span id="day_last" style="display:none; margin-right:15px;"><input type="text" name="day_last" value="{$day_last}" style="width:50px;"/>일</span>
+		<span id="day_more" style="display:none;"><input type="text" name="day_more" class="inputDate" value="{$day_more}" style="width:80px;"/>부터</span>
+		<span id="day_less" style="display:none; margin-right:15px;"><input type="text" name="day_less" class="inputDate" value="{$day_less}" style="width:80px;"/>까지</span>
+		<div class="btn"><input type="submit" value="조회" /></div>
+	</form>
+</div>
+
+
+<!--//로또복권 손익통계-->
+<div class="chart_wrap">
+	<span class="chart_title">로또복권 손익 통계 ({number_format($stats_info->sum_total)} {$module_config->money_lang}) 정산완료</span>
+	<div class="chart">
+		<div id="chart_type" class="graph" style="width:100%; height:200px;"></div>
+	</div>
+	<ul class="chart_list">
+		<li>
+			<a style="color:inherit; text-decoration:none;">
+				<span class="p_box" style="background:lightseagreen"></span>
+				<span style="display:block;">
+					<span class="percent">{round($stats_info->sum_getmoney / $stats_info->sum_total * 100,2)}%</span>
+					<span class="count">({number_format($stats_info->sum_getmoney)} {$module_config->money_lang})</span>
+				</span>
+				<span class="title">유저 당첨금</span>
+			</a>
+		</li>
+		<li>
+			<a style="color:inherit; text-decoration:none;">
+				<span class="p_box" style="background:#0088cc"></span>
+				<span style="display:block;">
+					<span class="percent">{round($stats_info->sum_tax / $stats_info->sum_total * 100,2)}%</span>
+					<span class="count">({number_format($stats_info->sum_tax)} {$module_config->money_lang})</span>
+				</span>
+				<span class="title">세금회수</span>
+			</a>
+		</li>
+		<li>
+			<a style="color:inherit; text-decoration:none;">
+				<span class="p_box" style="background:salmon; width:45%;"></span>
+				<span style="display:block;">
+					<span class="percent">{number_format($stats_info->sum_tax-$stats_info->sum_getmoney)} {$module_config->money_lang}</span>
+				</span>
+				<span class="title"><!--@if($stats_info->sum_tax-$stats_info->sum_getmoney > 0)-->이익<!--@else-->손해<!--@end--></span>
+			</a>
+		</li>
+	</ul>
+</div>
+
+
+<!--//로또복권 순위통계-->
+<table cellpadding='6' cellspacing="0" border='0' style="width:100%; border-top:2px solid #ccc;" class="table ss_nowrap">
+	<caption style="text-align:center; font-size:19px; margin-bottom:15px;">순위별 당첨확률 통계</caption>
+	<thead bgcolor="efefef">
+		<tr> 
+			<th scope="col"><input type="checkbox" title="모두체크하기" data-name="cart"/></th>
+			<th scope="col">당첨순위</th>
+			<th scope="col">당첨횟수({$stats_info->total_cnt}회)</th>
+			<th scope="col">당첨확률(실제)</th>
+			<th scope="col">당첨확률(설정값)</th>
+			<th scope="col">오차확률</th>
+		</tr>
+	</thead>
+	<tbody class="text_center">
+		<tr>
+			<td><input type="checkbox" name="cart" value="" /></td>
+			<td>1위<a class="more_btn" target="_blank" href="{getUrl('act','dispLotterylottoAdminLog','search_target','result','search_day','all','search_keyword',1,'page',1)}">조회</a></td>
+			<td>{$stats_info->first_cnt}회</td>
+			<td><b>{round($stats_info->first_cnt/$stats_info->total_cnt * 100,2)}%</b></td>
+			<td>{$module_config->first_percent}%</td>
+			<td>{round($stats_info->first_cnt/$stats_info->total_cnt * 100 - $module_config->first_percent,2)}%</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="cart" value="" /></td>
+			<td>2위<a class="more_btn" target="_blank" href="{getUrl('act','dispLotterylottoAdminLog','search_target','result','search_day','all','search_keyword',2,'page',1)}">조회</a></td>
+			<td>{$stats_info->second_cnt}회</td>
+			<td><b>{round($stats_info->second_cnt/$stats_info->total_cnt * 100,2)}%</b></td>
+			<td>{$module_config->second_percent}%</td>
+			<td>{round($stats_info->second_cnt/$stats_info->total_cnt * 100 - $module_config->second_percent,2)}%</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="cart" value="" /></td>
+			<td>3위<a class="more_btn" target="_blank" href="{getUrl('act','dispLotterylottoAdminLog','search_target','result','search_day','all','search_keyword',3,'page',1)}">조회</a></td>
+			<td>{$stats_info->third_cnt}회</td>
+			<td><b>{round($stats_info->third_cnt/$stats_info->total_cnt * 100,2)}%</b></td>
+			<td>{$module_config->third_percent}%</td>
+			<td>{round($stats_info->third_cnt/$stats_info->total_cnt * 100 - $module_config->third_percent,2)}%</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="cart" value="" /></td>
+			<td>4위<a class="more_btn" target="_blank" href="{getUrl('act','dispLotterylottoAdminLog','search_target','result','search_day','all','search_keyword',4,'page',1)}">조회</a></td>
+			<td>{$stats_info->fourth_cnt}회</td>
+			<td><b>{round($stats_info->fourth_cnt/$stats_info->total_cnt * 100,2)}%</b></td>
+			<td>{$module_config->fourth_percent}%</td>
+			<td>{round($stats_info->fourth_cnt/$stats_info->total_cnt * 100 - $module_config->fourth_percent,2)}%</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="cart" value="" /></td>
+			<td>5위<a class="more_btn" target="_blank" href="{getUrl('act','dispLotterylottoAdminLog','search_target','result','search_day','all','search_keyword',5,'page',1)}">조회</a></td>
+			<td>{$stats_info->fifth_cnt}회</td>
+			<td><b>{round($stats_info->fifth_cnt/$stats_info->total_cnt * 100,2)}%</b></td>
+			<td>{$module_config->fifth_percent}%</td>
+			<td>{round($stats_info->fifth_cnt/$stats_info->total_cnt * 100 - $module_config->fifth_percent,2)}%</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="cart" value="" /></td>
+			<td>꽝<a class="more_btn" target="_blank" href="{getUrl('act','dispLotterylottoAdminLog','search_target','result','search_day','all','search_keyword','꽝','page',1)}">조회</a></td>
+			<td>{$stats_info->lose_cnt}회</td>
+			<td><b>{round($stats_info->lose_cnt/$stats_info->total_cnt * 100,2)}%</b></td>
+			<td>{$module_config->lose_percent}%</td>
+			<td>{round($stats_info->lose_cnt/$stats_info->total_cnt * 100 - $module_config->lose_percent,2)}%</td>
+		</tr>
+	</tbody>
+</table>
+
+<!--//구매금액 순위-->
+<div class="stat_box">
+	<h4 class="stat_title">구매금액 순위</h3>
+	<ul>
+		<li loop="$rank_info_buy => $key,$val">
+			{@  $oMemberModel = &getModel('member');  
+				$member_info = $oMemberModel->getMemberInfoByMemberSrl($val->member_srl); 
+			}
+			<span class="point_rank">{$val->rank} 위</span>
+			<a class="member_{$val->member_srl}" href="#" onclick="return false">{$member_info->nick_name}</a>
+			<a class="more_btn" style="white-space:nowrap;" target="_blank" href="{getUrl('act','dispLotterylottoAdminLog','search_target','member_srl','search_day','all','search_keyword',$val->member_srl,'page',1)}">조회</a>
+			<span class="sum_point"><b>{number_format($val->buy_money)}</b> {$module_config->money_lang}</span>
+		</li>
+	</ul>
+</div>
+
+<!--//당첨금 순위-->
+<div class="stat_box">
+	<h4 class="stat_title">당첨금 순위</h3>
+	<ul>
+		<li loop="$rank_info_get => $key,$val">
+			{@  $oMemberModel = &getModel('member');  
+				$member_info = $oMemberModel->getMemberInfoByMemberSrl($val->member_srl); 
+			}
+			<span class="point_rank">{$val->rank} 위</span>
+			<a class="member_{$val->member_srl}" href="#" onclick="return false">{$member_info->nick_name}</a>
+			<a class="more_btn" style="white-space:nowrap;" target="_blank" href="{getUrl('act','dispLotterylottoAdminLog','search_target','member_srl','search_day','all','search_keyword',$val->member_srl,'page',1)}">조회</a>
+			<span class="sum_point"><b>{number_format($val->get_money)}</b> {$module_config->money_lang}</span>
+		</li>
+	</ul>
+</div>
+
+<!--//세금 순위-->
+<div class="stat_box">
+	<h4 class="stat_title">세금 순위</h3>
+	<ul>
+		<li loop="$rank_info_tax => $key,$val">
+			{@  $oMemberModel = &getModel('member');  
+				$member_info = $oMemberModel->getMemberInfoByMemberSrl($val->member_srl); 
+			}
+			<span class="point_rank">{$val->rank} 위</span>
+			<a class="member_{$val->member_srl}" href="#" onclick="return false">{$member_info->nick_name}</a>
+			<a class="more_btn" style="white-space:nowrap;" target="_blank" href="{getUrl('act','dispLotterylottoAdminLog','search_target','member_srl','search_day','all','search_keyword',$val->member_srl,'page',1)}">조회</a>
+			<span class="sum_point"><b>{number_format($val->total_tax)}</b> {$module_config->money_lang}</span>
+		</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+jQuery(function($){
+	$('#search_day').change(function(){
+		var val = $(this).children("option:selected").val();
+		change(val);
+	});
+	function change(val){
+		if(val == 'all' || val == 'today'){
+			$('#day_last').css("display", "none");
+			$('#day_more').css("display", "none");
+			$('#day_less').css("display", "none");
+		}else if(val == 'last'){
+			$('#day_last').css("display", "");
+			$('#day_more').css("display", "none");
+			$('#day_less').css("display", "none");
+		}else if(val == 'moreless'){
+			$('#day_last').css("display", "none");
+			$('#day_more').css("display", "");
+			$('#day_less').css("display", "");
+		}
+	}
+	change("{$search_day}");
+});
+//]]>
+</script>
+<script type="text/javascript">
+(function($){
+    $(function(){
+        var option = { changeMonth: true, changeYear: true, gotoCurrent: false,yearRange:'-100:+10', dateFormat:'yymmdd', onSelect:function(){
+
+            $(this).prev('input[type="hidden"]').val(this.value.replace(/-/g,""))}
+        };
+        $.extend(option,$.datepicker.regional['{$lang_type}']);
+        $(".inputDate").datepicker(option);
+		$(".dateRemover").click(function() {
+			$(this).prevAll('input').val('');
+			return false;});
+    });
+})(jQuery);
+</script>
+
+<script type="text/javascript">
+	jQuery(function () {
+	    var datas = [];
+		datas.push({label:"당첨금", data:{$stats_info->sum_getmoney}, color:"lightseagreen"});
+		datas.push({label:"세금회수", data:{$stats_info->sum_tax}, color:"#0088cc"});
+		jQuery.plot(jQuery("#chart_type"), datas,
+	        {  
+	            series: {pie: { show: true,
+	                            radius: 1,
+	                            innerRadius:40,
+	                            stroke: { width:2 },
+								label: {
+	                             	show:false,
+									radius: 3/5,
+	                             }
+	                     }}
+	                     ,
+	                legend: {
+	                    show: false,
+	                }
+	         });
+	});
+</script>

@@ -1,0 +1,348 @@
+<load target="css/default.css" />
+<load target="css/respond.css" cond="$module_config->respond_skin != 'no'" />
+
+<!--//결과화면-->
+<div id="lottery_result_wrap">
+	<div class="lottery_result_bg" onclick="jQuery('#lottery_result_wrap').fadeOut('slow')"></div>
+	<div class="lottery_result_box">
+		<div class="rank_result">
+			<img src="img/1.png" alt="result"/>
+		</div>
+		<div class="msg_result">
+			<span>과연.. 복권 결과는? </span>
+		</div>
+	</div>
+</div>
+
+<!--//복권화면-->
+<div id="lottery_view">
+	<!--// 상단텍스트-->
+	<div><!--#include("_header.html")--></div>
+	
+	<!--//상단-->
+	<div class="lottery_top">
+		<a class="m_msg" href="{getUrl('','module','admin','act','dispLotterylottoAdminModuleInfo')}"|cond="$logged_info->is_admin == 'Y'">Lotto Lottery</a>
+		<span class="w_msg">로또복권방에 오신것을 환영합니다.</span>
+		<div class="total_money_wrap">
+			<img class="t_img" src="img/prize3.png" alt="total_money" />
+			<span class="t_text">현재 누적당첨금</span>
+			<span class="t_money">{number_format($module_config->total_money)}</span>
+		</div>
+	</div>
+	<!--//중단-->
+	<div class="lottery_bottom">
+		<!--//복권정보-->
+		<div class="set_info">
+			<span class="info_subject">Lottery Information</span>
+			<div class="lottery_info">
+				<span class="l_info">복권구매 비용</span>
+				<span class="r_info" style="color:tomato"><b>{number_format($module_config->buy_money)}</b> {$module_config->money_lang}</span>
+			</div>
+			<div class="lottery_info">
+				<span class="l_info">보유 {$module_config->money_lang}</span>
+				<span class="r_info" style="color:#7A9626"><!--@if($logged_info)--><b>{number_format($module_config->user_money)}</b><!--@else-->0<!--@end--> {$module_config->money_lang}</span>
+			</div>
+			<div class="lottery_info">
+				<span class="l_info">오늘 구매횟수</span>
+				<span class="r_info"><!--@if($logged_info)-->{$module_config->today_count-1}<!--@else-->0<!--@end--> 매</span>
+			</div>
+			<div class="lottery_info">
+				<span class="l_info fix_left">당첨예상금액</span>
+				<span class="r_info"><b>1등</b> / {number_format($module_config->get_money1)} {$module_config->money_img} </span>
+				<span class="r_info"><b>2등</b> / {number_format($module_config->get_money2)} {$module_config->money_img} </span>
+				<span class="r_info"><b>3등</b> / {number_format($module_config->get_money3)} {$module_config->money_img} </span>
+				<span class="r_info"><b>4등</b> / {number_format($module_config->get_money4)} {$module_config->money_img} </span>
+				<span class="r_info"><b>5등</b> / {number_format($module_config->get_money5)} {$module_config->money_img} </span>
+			</div>
+		</div>
+		<!--//복권구매-->
+		<div class="lottery_skin">
+			<div class="lottery_btn" onclick="buy_lottery()" >복권구매</div>
+		</div>
+	</div>
+	<!--//하단-->
+	<div class="lottery_method">
+		<div class="l_div">
+			<span class="g_subject">참여방법</span>
+		</div>
+		<div class="r_div">
+			<span class="g_info" style="border-color:tomato" cond="$module_config->buy_limit_use == 'yes'">로또복권은 매일 <b>{$module_config->buy_limit_count}매</b> 까지 구매 가능합니다.</span>
+			<span class="g_info"><b>구매 버튼</b>을 클릭하여 복권을 구매합니다.</span>
+			<span class="g_info">당첨시 당첨금은 <b>자동수령</b> 됩니다.</span>
+		</div>
+	</div>
+	<!--// 미니정보 -->
+	<div class="lottery_mini_wrap">
+		<span class="mini_box tb_hidden">{date('Y년 m월 d일')}</span>
+		<span class="mini_box">오늘 누적된 당첨금 : {number_format($module_config->today_total_money)} {$module_config->money_img}</span>
+		<a class="mini_box mb_hidden" href="{getUrl('','act','dispLotterylottoMylottery')}" cond="$logged_info">나의구매내역</a>
+		<a class="mini_box rank_img mb_hidden" onclick="jQuery('.rank_info_wrap').slideToggle()" cond="$module_config->rank_list_use == 'yes'">　</a>
+		<a class="mini_box admin_img mb_hidden" href="{getUrl('','module','admin','act','dispLotterylottoAdminModuleInfo')}" target="_blank" cond="$logged_info->is_admin == 'Y'">　</a>
+	</div>
+	<!--//순위정보-->
+	<div class="rank_info_wrap" cond="$module_config->rank_list_use == 'yes'">
+		{@  $args->list_count = '5';
+			$args->sort_index = 'get_money';
+			$args->order_type = 'desc';
+		}
+		<div class="stat_box">
+			<h4 class="stat_title">1위 당첨액 순위 Top 5</h3>
+			<ul>
+				{@  $args->s_result = '1';
+					$oLotterylottoModel = &getModel('lotterylotto');  
+					$rank_info = $oLotterylottoModel->getLotteryLog($args)->data;
+					$rank = 1;
+				}
+				<li loop="$rank_info => $key,$val">
+					{@  $oMemberModel = &getModel('member');  
+						$member_info = $oMemberModel->getMemberInfoByMemberSrl($val->member_srl); 
+					}
+					<span class="point_rank">{$rank} 위</span>{@ $rank++}
+					<a class="member_{$val->member_srl}" href="#" onclick="return false">{$member_info->nick_name}</a>
+					<span class="sum_point"><b>{number_format($val->get_money)}</b> {$module_config->money_img}</span>
+				</li>
+				<li cond="!$rank_info">
+					<span class="point_rank">아직 1위 당첨자가 없습니다.<br/><br/>당신이 주인공이 되어보세요!</span>
+				</li>
+			</ul>
+		</div>
+		<div class="stat_box tb_hidden">
+			<h4 class="stat_title">2위 당첨액 순위 Top 5</h3>
+			<ul>
+				{@  $args->s_result = '2';
+					$oLotterylottoModel = &getModel('lotterylotto');  
+					$rank_info = $oLotterylottoModel->getLotteryLog($args)->data;
+					$rank = 1;
+				}
+				<li loop="$rank_info => $key,$val">
+					{@  $oMemberModel = &getModel('member');  
+						$member_info = $oMemberModel->getMemberInfoByMemberSrl($val->member_srl); 
+					}
+					<span class="point_rank">{$rank} 위</span>{@ $rank++}
+					<a class="member_{$val->member_srl}" href="#" onclick="return false">{$member_info->nick_name}</a>
+					<span class="sum_point"><b>{number_format($val->get_money)}</b> {$module_config->money_img}</span>
+				</li>
+				<li cond="!$rank_info">
+					<span class="point_rank">아직 2위 당첨자가 없습니다.<br/><br/>당신이 주인공이 되어보세요!</span>
+				</li>
+			</ul>
+		</div>
+		<div class="stat_box tb_hidden">
+			<h4 class="stat_title">3위 당첨액 순위 Top 5</h3>
+			<ul>
+				{@  $args->s_result = '3';
+					$oLotterylottoModel = &getModel('lotterylotto');  
+					$rank_info = $oLotterylottoModel->getLotteryLog($args)->data;
+					$rank = 1;
+				}
+				<li loop="$rank_info => $key,$val">
+					{@  $oMemberModel = &getModel('member');  
+						$member_info = $oMemberModel->getMemberInfoByMemberSrl($val->member_srl); 
+					}
+					<span class="point_rank">{$rank} 위</span>{@ $rank++}
+					<a class="member_{$val->member_srl}" href="#" onclick="return false">{$member_info->nick_name}</a>
+					<span class="sum_point"><b>{number_format($val->get_money)}</b> {$module_config->money_img}</span>
+				</li>
+				<li cond="!$rank_info">
+					<span class="point_rank">아직 3위 당첨자가 없습니다.<br/><br/>당신이 주인공이 되어보세요!</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!--//참여리스트-->
+	<table class="user_list" summary="복권결과 리스트" cond="$module_config->user_list_use != 'no'">
+		<thead>
+			<tr>
+				<th class="mb_hidden">번호</th>
+				<th>닉네임</th>
+				<th>복권결과</th>
+				<th>당첨금</th>
+				<th class="tb_hidden" cond="!in_array('x',$module_config->prize_msg_target)">당첨소감</th>
+				<th class="tb_hidden">일시</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr loop="$log_info => $key, $val">
+				<td class="mb_hidden">{$key}</td>
+				<td>
+					{@  $oMemberModel = &getModel('member');  
+						$member_info = $oMemberModel->getMemberInfoByMemberSrl($val->member_srl); 
+					}
+					<a class="member_{$val->member_srl}" href="#" onclick="return false" style="margin-right:25px;">{$member_info->nick_name}</a>
+				</td>
+				<td>
+					<span cond="$val->result == '1'"><img src="img/1.png" class="result_img"/></span>
+					<span cond="$val->result == '2'"><img src="img/2.png" class="result_img"/></span>
+					<span cond="$val->result == '3'"><img src="img/3.png" class="result_img"/></span>
+					<span cond="$val->result == '4'"><img src="img/4.png" class="result_img"/></span>
+					<span cond="$val->result == '5'"><img src="img/5.png" class="result_img"/></span>
+					<span cond="$val->result == '0'"><img src="img/0.png" class="result_img"/></span>
+				</td>
+				<td>
+					<span cond="$val->get_money != '0'"><b style="color:#555">{number_format($val->get_money)}</b> {$module_config->money_img}</span>
+					<span cond="$val->get_money == '0'">없음</span>
+				</td>
+				<td class="tb_hidden" style="max-width:110px" cond="!in_array('x',$module_config->prize_msg_target)">
+					<span cond="$val->prize_msg">{$val->prize_msg}</span>
+					<span cond="!$val->prize_msg">없음</span>
+				</td>
+				<td class="tb_hidden">{date("Y-m-d H:i:s",strtotime($val->regdate));}</td>
+			</tr>
+		</tbody>
+	</table>
+	<!--// 페이지 네비게이션 -->
+	<div class="page_navi" cond="$module_config->user_list_use != 'no'"> 
+		<a href="{getUrl('page','','module_srl','')}">처음</a> 
+		<block loop="$page_no = $page_navigation->getNextPage()">
+			<a cond="$page == $page_no" class="page_seleted"><strong cond="$page_no == $page">{$page_no}</strong></a>
+			<a cond="$page != $page_no" href="{getUrl('page',$page_no,'module_srl','')}">{$page_no}</a> 
+		</block>
+		<a href="{getUrl('page',$page_navigation->last_page,'module_srl','')}" >맨뒤</a>
+	</div>
+	
+	<!--// 하단텍스트 -->
+	<div><!--#include("_footer.html")--></div>
+</div>
+
+
+<script type="text/javascript">
+//복권구입
+function buy_lottery() {
+	if( confirm("복권 구매시 {$module_config->buy_money} {$module_config->money_lang} 차감됩니다") ){
+		exec_xml('lotterylotto','procLotterylottoBuyLottery',{}, lotteryResult, ['message','msg','rank','log_srl','member_srl','get_money']); //모듈이름//액션이름//보내줄값//콜백함수//콜백함수에서 받을변수(미입력시 message 기본내장)
+	}
+}
+
+//새로고침(당첨소감)
+function reload(){
+	location.reload();
+}
+
+//복권결과
+function lotteryResult(ret_obj) {
+	//변수받음
+	var message = ret_obj['message'];
+	var msg = ret_obj['msg'];
+	var rank = ret_obj['rank'];
+	var log_srl = ret_obj['log_srl'];
+	var member_srl = ret_obj['member_srl'];
+	var get_money = ret_obj['get_money'];
+		
+	
+	jQuery(function($){
+	//결과이미지
+	var rank_result = $('div.rank_result');
+	
+		//복권결과 있을시
+		if(rank){
+			$('#lottery_result_wrap').fadeIn('fast');
+			//1
+			$(rank_result).delay(140).html('<img src="img/1.png" />');
+			//2
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/2.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(140);
+			//3
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/3.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(150);
+			//4
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/4.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(160);
+			//5
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/5.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(180);
+			//6
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/0.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(200);
+			//7
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/1.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(230);
+			//8
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/2.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(260);
+			//9
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/3.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(300);
+			//10
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/4.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(330);
+			//11
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/5.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(360);
+			//12
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/0.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(400);
+			//결과출력
+			$(rank_result).queue(function(){
+				$(rank_result).html('<img src="img/'+rank+'.png" />');
+				$(this).dequeue();
+			});
+			$(rank_result).delay(200);
+			
+			//메세지출력
+			$(rank_result).queue(function(){
+				$('div.msg_result').html('<span>'+msg+'</span>');
+				msg = msg.replace(/\<br\>/gi,'\n');
+				if('{$module_config->prize_msg_target2}'.indexOf(rank) != -1){ //당첨소감기능
+					var prize_msg;
+					prize_msg = prompt(msg+'\n\n당첨소감을 작성해주세요',''); 
+					//변수입력
+					var params = {
+						log_srl : log_srl ,			//로그번호
+						member_srl : member_srl ,	//회원번호
+						prize_msg : prize_msg, 		//당첨소감메세지 
+						result : rank,				//당첨순위
+						get_money : get_money		//당첨금액
+					};	
+					//ajax처리 
+					exec_xml('lotterylotto','procLotterylottoUpdateMsg',params,reload);
+				}else{
+					alert(msg);
+					location.reload();
+				}
+				$(this).dequeue();
+			});
+		}else{
+			alert(message);
+		}
+	});
+}
+
+//ajax 기능사용중 확인메세지 안나오도록 처리
+jQuery.ajaxSetup({
+	global: false
+});
+
+</script>

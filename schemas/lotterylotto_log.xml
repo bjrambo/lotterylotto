@@ -1,0 +1,16 @@
+<table name="lotterylotto_log">
+    <column name="log_srl" type="number" size="11" notnull="notnull" auto_increment="auto_increment" primary_key="primary_key" />
+	<column name="member_srl" type="number" size="11" notnull="notnull" />
+	<column name="result" type="varchar" size="128" notnull="notnull" />
+	<column name="user_money" type="number" size="11" notnull="notnull" />
+	<column name="buy_money" type="number" size="11" notnull="notnull" />
+	<column name="get_money" type="number" size="11" notnull="notnull" />
+	<column name="total_money" type="number" size="11" notnull="notnull" />
+	<column name="buy_tax" type="number" size="11" notnull="notnull" />
+	<column name="get_tax" type="number" size="11" notnull="notnull" />
+	<column name="get_type" type="varchar" size="128" notnull="notnull" />
+	<column name="prize_msg" type="varchar" size="256" notnull="notnull" />
+	<column name="regdate" type="date" index="idx_regdate" notnull="notnull" />
+	<column name="ipaddress" type="varchar" size="128" notnull="notnull" />
+</table>
+

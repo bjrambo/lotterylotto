@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+    <title xml:lang="ko">로또복권 모듈</title>
+    <description xml:lang="ko">간단하면서도 중독성 있는 복권모듈</description>
+    <version>1.0.5</version>
+    <date>2017-12-29</date>
+    <category>service</category>
+	<author email_address="samswnlee@naver.com" link="http://www.xecenter.com/">
+        <name xml:lang="ko">숭숭군</name>
+    </author>
+</module>

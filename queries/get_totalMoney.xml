@@ -1,0 +1,16 @@
+<query id="get_totalMoney" action="select">
+    <tables>
+        <table name="lotterylotto_log" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+	<conditions>
+		<condition operation="more" column="regdate" var="regdate_more" pipe="and" />
+		<condition operation="less" column="regdate" var="regdate_less" pipe="and" />
+    </conditions>
+	<navigation>
+        <index var="sort_index" default="log_srl" order="desc" />
+        <list_count var="list_count" default="1" />
+    </navigation> 
+</query>

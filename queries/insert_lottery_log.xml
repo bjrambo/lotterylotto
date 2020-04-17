@@ -1,0 +1,20 @@
+<query id="insert_lottery_log" action="insert">
+    <tables>
+        <table name="lotterylotto_log" />
+    </tables>
+    <columns>
+		<column name="log_srl" var="log_srl" />
+		<column name="member_srl" var="member_srl" />
+		<column name="result" var="result" />
+		<column name="user_money" var="user_money" />
+		<column name="buy_money" var="buy_money" />
+		<column name="get_money" var="get_money" />
+		<column name="total_money" var="total_money" />
+		<column name="buy_tax" var="buy_tax" />
+		<column name="get_tax" var="get_tax" />
+		<column name="get_type" var="get_type" />
+		<column name="regdate" var="regdate" />
+        <column name="ipaddress" default="ipaddress()" />
+		 <column name="prize_msg" default="" />
+    </columns>
+</query>

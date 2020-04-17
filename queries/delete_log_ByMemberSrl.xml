@@ -1,0 +1,8 @@
+<query id="delete_log" action="delete">
+    <tables>
+        <table name="lotterylotto_log" />
+    </tables>
+    <conditions>
+        <condition operation="equal" column="member_srl" var="member_srl" filter="number" />
+    </conditions>
+</query>

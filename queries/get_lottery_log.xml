@@ -1,0 +1,23 @@
+<query id="get_lottery_log" action="select">
+    <tables>
+        <table name="lotterylotto_log" />
+    </tables>
+    <columns>
+        <column name="*" />
+    </columns>
+	<conditions>
+        <condition operation="equal" column="log_srl" var="s_log_srl" />
+		<condition operation="equal" column="member_srl" var="s_member_srl" />
+		<condition operation="equal" column="result" var="s_result" />
+		<condition operation="equal" column="get_type" var="s_get_type" />
+		<condition operation="equal" column="ipaddress" var="s_ipaddress" />
+		<condition operation="more" column="regdate" var="regdate_more" pipe="and" />
+		<condition operation="less" column="regdate" var="regdate_less" pipe="and" />
+    </conditions>
+	<navigation>
+        <index var="sort_index" default="log_srl" order="order_type" />
+        <list_count var="list_count" default="20" />
+        <page_count var="page_count" default="10" />
+        <page var="page" default="1" />
+    </navigation> 
+</query>

@@ -1,0 +1,12 @@
+<query id="update_prizeMsg" action="update">
+    <tables>
+        <table name="lotterylotto_log" />
+    </tables>
+    <columns>
+        <column name="prize_msg" var="prize_msg" />
+	</columns>
+	<conditions>
+        <condition operation="equal" column="log_srl" var="log_srl" />
+        <condition operation="equal" column="member_srl" var="member_srl" pipe="and" />
+    </conditions>
+</query>
