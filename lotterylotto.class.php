@@ -7,9 +7,7 @@ class lotterylotto extends ModuleObject
 	 * checkUpdate(), moduleUpdate() 등에서 체크 및 생성 루틴을 중복으로 작성하지 않아도 된다.
 	 */
 	protected static $_insert_triggers = array(
-		// array('document.insertDocument', 'after', 'controller', 'triggerAfterInsertDocument'),
-		// array('document.updateDocument', 'after', 'controller', 'triggerAfterUpdateDocument'),
-		// array('document.deleteDocument', 'after', 'controller', 'triggerAfterDeleteDocument'),
+		array('member.deleteMember', 'after', 'controller', 'triggerAfterDeleteMember'),
 	);
 
 	/**
@@ -81,12 +79,20 @@ class lotterylotto extends ModuleObject
 	 ************************************************/
 	function checkUpdate()
 	{
-
-		//트리거 확인
 		$oModuleModel = getModel('module');
-		if (!$oModuleModel->getTrigger('member.deleteMember', 'lotterylotto', 'controller', 'triggerAfterDeleteMember', 'after'))
+		foreach (self::$_insert_triggers as $trigger)
 		{
-			return true;
+			if (!$oModuleModel->getTrigger($trigger[0], $this->module, $trigger[2], $trigger[3], $trigger[1]))
+			{
+				return true;
+			}
+		}
+		foreach (self::$_delete_triggers as $trigger)
+		{
+			if ($oModuleModel->getTrigger($trigger[0], $this->module, $trigger[2], $trigger[3], $trigger[1]))
+			{
+				return true;
+			}
 		}
 
 		return false;
@@ -99,13 +105,21 @@ class lotterylotto extends ModuleObject
 	{
 		$oModuleModel = getModel('module');
 		$oModuleController = getController('module');
-		//트리거 설치 (회원탈퇴 혹은 삭제시 해당회원의 로또복권 로그삭제)
-		if (!$oModuleModel->getTrigger('member.deleteMember', 'lotterylotto', 'controller', 'triggerAfterDeleteMember', 'after'))
+		foreach (self::$_insert_triggers as $trigger)
 		{
-			$oModuleController->insertTrigger('member.deleteMember', 'lotterylotto', 'controller', 'triggerAfterDeleteMember', 'after');
+			if (!$oModuleModel->getTrigger($trigger[0], $this->module, $trigger[2], $trigger[3], $trigger[1]))
+			{
+				$oModuleController->insertTrigger($trigger[0], $this->module, $trigger[2], $trigger[3], $trigger[1]);
+			}
 		}
-
-		$this->createObject(0, 'success_updated');
+		foreach (self::$_delete_triggers as $trigger)
+		{
+			if ($oModuleModel->getTrigger($trigger[0], $this->module, $trigger[2], $trigger[3], $trigger[1]))
+			{
+				$oModuleController->deleteTrigger($trigger[0], $this->module, $trigger[2], $trigger[3], $trigger[1]);
+			}
+		}
+		return $this->createObject(0, 'success_updated');
 	}
 
 	/*****************************************************
