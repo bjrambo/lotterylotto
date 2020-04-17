@@ -41,4 +41,4 @@
             Context::addJsFile("./common/js/xml_js_filter.js", true, '', -100000);
 		}
 
-	}
+	} 

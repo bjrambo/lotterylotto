@@ -13,4 +13,3 @@
 	<column name="regdate" type="date" index="idx_regdate" notnull="notnull" />
 	<column name="ipaddress" type="varchar" size="128" notnull="notnull" />
 </table>
-
