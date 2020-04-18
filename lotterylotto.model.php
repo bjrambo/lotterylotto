@@ -21,7 +21,8 @@ class lotterylottoModel extends lotterylotto
 		{
 			return;
 		}
-		$oModuleModel = &getModel('module');
+		/** @var moduleModel $oModuleModel */
+		$oModuleModel = getModel('module');
 		$module_info = $oModuleModel->getModuleInfoByModuleSrl($output->data->module_srl);
 		return $module_info;
 	}
@@ -60,14 +61,16 @@ class lotterylottoModel extends lotterylotto
 			return;
 		}
 		if ($money_type == 'point')
-		{ //포인트
-			$oPointModel = &getModel('point');
+		{
+			//포인트
+			$oPointModel = getModel('point');
 			$point = $oPointModel->getPoint($logged_info->member_srl);
 			return $point;
 		}
 		else
-		{ //캐시
-			$oCashModel = &getModel('cash');
+		{
+			//캐시
+			$oCashModel = getModel('cash');
 			$cash = $oCashModel->getCash($logged_info->member_srl);
 			return $cash;
 		}
@@ -82,13 +85,13 @@ class lotterylottoModel extends lotterylotto
 		}
 		if ($money_type == 'point')
 		{ //포인트
-			$oPointController = &getController('point');
+			$oPointController = getController('point');
 			$oPointController->setPoint($logged_info->member_srl, $money, $change_type);
 			return;
 		}
 		else
 		{ //캐시
-			$oCashController = &getController('cash');
+			$oCashController = getController('cash');
 			$oCashController->setCash($logged_info->member_srl, $money, $change_type);
 			return;
 		}
@@ -111,7 +114,8 @@ class lotterylottoModel extends lotterylotto
 		if ($result == '1')
 		{
 			if ($module_config->money_type1 == 'fix')
-			{ //고정 당첨금
+			{
+				//고정 당첨금
 				$this->changeUserMoney($module_config->money_type, 'add', $module_config->get_fix_money1, $logged_info);
 				$output->get_money = $module_config->get_fix_money1;
 				$output->get_tax = $module_config->fix_money_minus == 'yes' ? $module_config->get_fix_money1 : 0;
@@ -366,5 +370,3 @@ class lotterylottoModel extends lotterylotto
 		return $result;
 	}
 }
-
-?>

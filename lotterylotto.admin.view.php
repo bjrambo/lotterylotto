@@ -9,9 +9,10 @@
         //초기화
         function init() {
 			//모듈정보구함
+	        $args = new stdClass();
 			$args->module = 'lotterylotto'; //쿼리에 모듈명 변수전달
-			$oModuleModel = &getModel('module');
-			$oLotterylottoModel = &getModel('lotterylotto');
+			$oModuleModel = getModel('module');
+			$oLotterylottoModel = getModel('lotterylotto');
             $this->module_info = $oLotterylottoModel->getModuleInfo($args);
             $this->module_config = $oModuleModel->getModuleConfig('lotterylotto');		
 			//모듈정보세팅
@@ -24,7 +25,7 @@
 
 		//스킨관리 
 		function dispLotterylottoAdminSkinInfo() {
-			$oModuleAdminModel = &getAdminModel('module');
+			$oModuleAdminModel = getAdminModel('module');
 			$skin_content = $oModuleAdminModel->getModuleSkinHTML($this->module_info->module_srl);
 			Context::set('skin_content', $skin_content);
 			// 템플릿 파일 지정			
@@ -33,7 +34,7 @@
 		
 		//권한관리
 		function dispLotterylottoAdminGrantInfo() {
-			$oModuleAdminModel = &getAdminModel('module');
+			$oModuleAdminModel = getAdminModel('module');
 			$grant_content = $oModuleAdminModel->getModuleGrantHTML($this->module_info->module_srl, $this->xml_info->grant);
 			Context::set('grant_content', $grant_content);
 			//템플릿 파일 지정
@@ -43,7 +44,7 @@
         //관리자 모듈설정
         function dispLotterylottoAdminModuleInfo() {
 			// 모듈 카테고리 목록 구함
-			$oModuleModel = &getModel('module');
+			$oModuleModel = getModel('module');
             $module_category = $oModuleModel->getModuleCategories();
             Context::set('module_category', $module_category);
 			// 스킨 목록 구함
@@ -52,7 +53,7 @@
             Context::set('skin_list',$skin_list);
 			Context::set('mskin_list',$mskin_list);
 			// 레이아웃 목록 구함
-            $oLayoutModel = &getModel('layout');
+            $oLayoutModel = getModel('layout');
             $layout_list = $oLayoutModel->getLayoutList();
 			$mobile_layout_list = $oLayoutModel->getLayoutList(0,"M");
             Context::set('layout_list', $layout_list);
@@ -129,7 +130,7 @@
 			if(!$args->order_type) $args->order_type = 'desc';
 			
 			//로그구함
-            $oLotterylottoModel = &getModel('lotterylotto');
+            $oLotterylottoModel = getModel('lotterylotto');
             $output = $oLotterylottoModel->getLotteryLog($args);
 			
 			//결과값 세팅
@@ -177,7 +178,7 @@
 			$args->list_count = '9999999999';
 						
 			//로그구함
-            $oLotterylottoModel = &getModel('lotterylotto');
+            $oLotterylottoModel = getModel('lotterylotto');
             $output = $oLotterylottoModel->getLotteryLog($args);
 			
 			//통계구함

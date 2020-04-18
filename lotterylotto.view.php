@@ -19,13 +19,14 @@ class lotterylottoView extends lotterylotto
 		}
 		$this->setTemplatePath($template_path);
 
-		//모듈정보구함
+		$oLotterylottoModel = getModel('lotterylotto');
+		//TODO(BJRambo) : 모듈 가져오는 방식이 마음에 안듬. 새로운 방법을 찾아보자. 디비 쿼리가 계속 생기지 않도록하자
+		$args = new stdClass();
 		$args->module = 'lotterylotto'; //쿼리에 모듈명 변수전달
-		$oModuleModel = &getModel('module');
-		$oLotterylottoModel = &getModel('lotterylotto');
 		$this->module_info = $oLotterylottoModel->getModuleInfo($args);
-		$this->module_config = $oModuleModel->getModuleConfig('lotterylotto');
-		//모듈정보세팅
+		
+		$this->module_config = $this->getConfig();
+		
 		Context::set('module_config', $this->module_config);
 		Context::set('module_info', $this->module_info);
 	}
@@ -34,9 +35,8 @@ class lotterylottoView extends lotterylotto
 	//복권화면
 	function dispLotterylottoIndex()
 	{
-
 		//변수세팅
-		$oLotterylottoModel = &getModel('lotterylotto');
+		$oLotterylottoModel = getModel('lotterylotto');
 		$logged_info = Context::get('logged_info');
 		//보유머니
 		$this->module_config->user_money = $oLotterylottoModel->checkUserMoney($this->module_config->money_type, $logged_info);
@@ -58,7 +58,7 @@ class lotterylottoView extends lotterylotto
 		//$this->module_config->total_money = executeQuery('lotterylotto.get_totalMoney')->data->total_money ? executeQuery('lotterylotto.get_totalMoney')->data->total_money : $this->module_config->emergency_money;
 
 		//오늘구매횟수
-		$args = null;
+		$args = new stdClass();
 		$args->list_count = '500';
 		$args->regdate_more = date('Ymd');
 		$args->s_member_srl = $logged_info->member_srl;
@@ -70,10 +70,10 @@ class lotterylottoView extends lotterylotto
 		$this->module_config->get_money4 = $this->module_config->money_type4 == 'fix' ? $this->module_config->get_fix_money4 : intval($this->module_config->get_per_money4 / 100 * $this->module_config->total_money);
 		$this->module_config->get_money5 = $this->module_config->money_type5 == 'fix' ? $this->module_config->get_fix_money5 : intval($this->module_config->get_per_money5 / 100 * $this->module_config->total_money);
 		//오늘누적 당첨금
-		$args = null;
+		$args = new stdClass();
 		$args->regdate_more = date('Ymd');
 		$today = executeQuery('lotterylotto.get_totalMoney', $args);
-		$args = null;
+		$args = new stdClass();
 		$args->regdate_less = date('Ymd');
 		$yesterday = executeQuery('lotterylotto.get_totalMoney', $args);
 		$this->module_config->today_total_money = $today->data->total_money && $yesterday->data->total_money ? $today->data->total_money - $yesterday->data->total_money : $today->data->total_money;
@@ -84,7 +84,7 @@ class lotterylottoView extends lotterylotto
 		Context::set('module_config', $this->module_config);
 
 		//복권로그 구함
-		$args = null;
+		$args = new stdClass();
 		$args->page = Context::get('page');
 		$args->order_type = 'desc';
 		$args->page_count = '5';
@@ -108,13 +108,14 @@ class lotterylottoView extends lotterylotto
 	function dispLotterylottoMylottery()
 	{
 		//변수세팅
-		$oLotterylottoModel = &getModel('lotterylotto');
+		$oLotterylottoModel = getModel('lotterylotto');
 		$logged_info = Context::get('logged_info');
 		//구매금액 && 당첨금액 && 구매횟수
-		$args = null;
+		$args = new stdClass();
 		$args->s_member_srl = $logged_info->member_srl;
 		$args->list_count = '99999';
 		$user_lottery = $oLotterylottoModel->getLotteryLog($args);
+		$user_money = new stdClass();
 		foreach ($user_lottery->data as $key => $val)
 		{
 			$user_money->get_money = $val->get_money + $user_money->get_money;
@@ -127,7 +128,7 @@ class lotterylottoView extends lotterylotto
 		Context::set('module_config', $this->module_config);
 
 		//복권로그 구함
-		$args = null;
+		$args = new stdClass();
 		$args->s_member_srl = $logged_info->member_srl;
 		$args->page = Context::get('page');
 		$args->order_type = 'desc';
@@ -146,8 +147,4 @@ class lotterylottoView extends lotterylotto
 		//템플릿 파일 설정
 		$this->setTemplateFile('my_lottery');
 	}
-
-
 }
-
-?>
