@@ -85,6 +85,8 @@ class lotterylottoAdminView extends lotterylotto
 		{
 			$search_day = 'all';
 		}
+		
+		$args = new stdClass();
 		if ($search_day == 'last')
 		{
 			$day_last = Context::get('day_last');
@@ -192,6 +194,7 @@ class lotterylottoAdminView extends lotterylotto
 			$search_day = 'today';
 		}
 		//오늘통계
+		$args = new stdClass();
 		if ($search_day == 'today')
 		{
 			$args->regdate_more = date('Ymd');

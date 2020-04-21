@@ -19,7 +19,7 @@ class lotterylottoAdminController extends lotterylotto
 		$args = Context::getRequestVars();
 		$args->module = 'lotterylotto';
 		//모듈등록 유무에 따라 insert/update
-		$oModuleController = &getController('module');
+		$oModuleController = getController('module');
 		if (!$args->module_srl)
 		{
 			$output = $oModuleController->insertModule($args); //모듈insert
@@ -41,9 +41,8 @@ class lotterylottoAdminController extends lotterylotto
 	//로또복권 설정
 	function procLotterylottoAdminConfig()
 	{
-
-		// 변수정리
 		$args = Context::getRequestVars();
+		$module_config = new stdClass();
 		$module_config->module = 'lotterylotto';    //모듈명
 		$module_config->money_type = $args->money_type;         //화폐단위
 		$module_config->respond_skin = $args->respond_skin;     //반응형스킨
@@ -112,15 +111,8 @@ class lotterylottoAdminController extends lotterylotto
 		$module_config->user_list_date = intval($args->user_list_date) ? $args->user_list_date : 7;        //조회기간(n일)
 		$module_config->user_list_count = intval($args->user_list_count) ? $args->user_list_count : 7;    //목록수
 
-
-		// 설정저장
-		$oModuleController = &getController('module');
-		$oModuleController->insertModuleConfig('lotterylotto', $module_config);
-
-		// 성공메세지
+		$this->setConfig($module_config);
 		$this->setMessage('success_updated');
-
-		//설정 화면으로 돌아감
 		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispLotterylottoAdminConfig'));
 	}
 
@@ -144,7 +136,7 @@ class lotterylottoAdminController extends lotterylotto
 		foreach ($log_srl_list as $key => $val)
 		{
 			// 루프돌면서 선택된 로그 삭제
-			$args = null;
+			$args = new stdClass();
 			$args->log_srl = $val;
 			$this->DeleteLog($args);
 		}
@@ -156,7 +148,8 @@ class lotterylottoAdminController extends lotterylotto
 	{
 		$this->DeleteLogAll();
 		//auto_increment 초기화
-		$oDB = &DB::getInstance();
+		$oDB = DB::getInstance();
+		// TODO : wht use to query?
 		$query = sprintf("alter table %slotterylotto_log auto_increment=1", $oDB->prefix);
 		$query = $oDB->_query($query);
 		$oDB->_fetch($query);
@@ -187,5 +180,3 @@ class lotterylottoAdminController extends lotterylotto
 
 
 }
-
-?>
